@@ -2,8 +2,12 @@
 
 **Workshop Source:** AWS Workshop Studio
 **Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
-**Level:** Intermediate
-**Status:** COMPLETED
+**Duration:** 5 hours  
+**Level:** Intermediate  
+**Status:** Completed
+
+**Author:** HoangBaoPhuoc (phuochb)  
+**Co-author:** PNg-HA (Anh Pham)
 
 ---
 
