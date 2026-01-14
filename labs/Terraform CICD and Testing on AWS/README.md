@@ -16,6 +16,16 @@ This workshop demonstrates the implementation of a robust CI/CD pipeline for Ter
 
 ---
 
+## Prerequisites
+
+- AWS account with administrator or sandbox permissions
+- AWS CLI configured on your workstation (or equivalent cloud IDE)
+- Git installed
+- Terraform and tfenv installed
+- Optional: Docker installed if you plan to run containerized tests locally
+
+---
+
 ## Workshop Scenario
 
 As a Cloud Security Engineer, you are tasked with automating the deployment of AWS infrastructure for an enterprise environment. The solution ensures that all Terraform modules are validated for syntax, tested for logic using the Terraform Test Framework, and scanned for security vulnerabilities using Checkov before being deployed via AWS CodePipeline.
@@ -35,6 +45,8 @@ Prepare the development environment by configuring the Integrated Development En
 Ensure programmatic administrator access is available. Recommended regions include `us-east-1`, `us-east-2`, or `us-west-2`.
 
 #### 1.2 CloudFormation Stack Creation
+
+> Note: If you are running this lab locally or in your own IDE, you can skip the CloudFormation Code Editor setup and work directly in this repository.
 
 1. On the Create stack page, in the **Prerequisite - Prepare template** section, select **Build from Infrastructure Composer** then **Create a template in Infrastructure Composer**.
    ![AWS CloudFormation - Stack Parameters Configuration for Workshop Environment](img/1.1.png)
@@ -184,7 +196,7 @@ Perform static security analysis to identify misconfigurations and compliance vi
 
 ```bash
     pwd
-    checkov --directory /workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd
+    checkov --directory workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd
 
     # Alternatively, you can just run checkov -d . to run it against all files in the current directory.
     checkov -d . --compact
@@ -294,7 +306,7 @@ This workshop uses **git-remote-s3** to simulate repositories without external p
 #### Step 1: Navigate to Directory
 
 ```bash
-cd /workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core
+cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core
 ```
 
 ---
@@ -743,7 +755,7 @@ In this section, we'll enhance the Terraform Deployment Pipeline by adding a man
 #### Step 1: Navigate to Directory
 
 ```bash
-cd /workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core
+cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core
 ```
 
 ---
@@ -1041,7 +1053,7 @@ Deprovision all created resources to ensure cost optimization and prevent ongoin
 #### Step 1: Navigate to Production Workload Directory
 
 ```bash
-cd /workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/example-production-workload
+cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/example-production-workload
 ```
 
 ---
