@@ -1,6 +1,6 @@
 # Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS
 
-**Workshop Source:** AWS Workshop Studio
+**Based on:** AWS Workshop Studio - Terraform CI/CD and Testing on AWS  
 **Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
 **Duration:** 5 hours  
 **Level:** Intermediate  
@@ -1223,8 +1223,6 @@ Performed a final manual cleanup in the AWS SNS Console to ensure no orphan subs
 
 ### 5.3 Delete CloudFormation Stack (If Applicable)
 
-If you followed the **"On your own - Bring your own AWS Account"** path and deployed the CloudFormation template for the Code Editor:
-
 #### Step 1: Navigate to CloudFormation
 
 Go to AWS Console → CloudFormation
@@ -1233,7 +1231,7 @@ Go to AWS Console → CloudFormation
 
 #### Step 2: Delete Stack
 
-1. Find the stack (likely named `Terraform-CICD-Workshop`)
+1. Find your CloudFormation stack (default name: `Terraform-CICD-Workshop` or custom name you provided)
 2. Select the stack
 3. Click **Delete**
 4. Confirm deletion
