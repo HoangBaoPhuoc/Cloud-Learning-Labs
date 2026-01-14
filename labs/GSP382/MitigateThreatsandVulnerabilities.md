@@ -3,10 +3,8 @@
 **Lab Code:** GSP382  
 **Duration:** 40 minutes  
 **Level:** Intermediate  
-**Status:** Completed
-
+**Status:** Completed  
 **Author:** HoangBaoPhuoc (phuochb)  
-**Co-author:** PNg-HA (Anh Pham)
 
 ---
 

@@ -1,8 +1,8 @@
-# Terraform CI/CD and Testing on AWS - Workshop Writeup
+# Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS
 
-**Workshop Source:** AWS Workshop Studio
-**Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
-**Level:** Intermediate
+**Workshop Source:** AWS Workshop Studio  
+**Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing  
+**Level:** Intermediate  
 **Status:** COMPLETED
 
 ---
@@ -41,7 +41,9 @@ Ensure programmatic administrator access is available. Recommended regions inclu
    ![Successfully import .yaml](img/1.3.png)
    ![Rename stack](img/1.4.png)
    ![Select to acknowledge create IAM resource](img/1.5.png)
+   Submit successfully!
    ![Overview stack created](img/{59E12DA4-7ED5-4022-B5D0-80C9599A9D8A}.png)
+   ![Overview stack output](img/Screenshot_14-1-2026_214646_ap-southeast-2.console.aws.amazon.com.jpeg)
 
 3. Once the stack is created, select the **Outputs** tab to view the relevant values we will use in the next part of the workshop. In the Outputs tab, note the **Password** and **URL** values.
 
@@ -89,7 +91,7 @@ Develop a standardized Terraform module and perform localized testing to identif
 
 #### Overview
 
-Create a well-structured Terraform module following best practices for organization and reusability.
+Create a well-structured Terraform module following best practices for organization and reusability in the workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd/ directory.
 
 #### Module Structure
 
@@ -145,7 +147,9 @@ Use the native Terraform Test Framework to validate module behavior without depl
 3. **Execute Tests:**
 
    ```bash
-   terraform test
+    cd terraform-config/modules/module-aws-tf-cicd
+    terraform init
+    terraform test
    ```
 
 4. **Validate Results:**
@@ -173,10 +177,15 @@ Perform static security analysis to identify misconfigurations and compliance vi
 #### Checkov Implementation
 
 1. **Run Security Scan:**
+   Run checkov --directory /path-to-your-module-directory replacing /path-to-your-module-directory with the output in the terminal after you ran the pwd command.
 
-   ```bash
-   checkov -d . --compact
-   ```
+```bash
+    pwd
+    checkov --directory /workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd
+
+    # Alternatively, you can just run checkov -d . to run it against all files in the current directory.
+    checkov -d . --compact
+```
 
 2. **Review Scan Results:**
    Analyze findings for common security issues:
@@ -217,6 +226,17 @@ Perform static security analysis to identify misconfigurations and compliance vi
 - Customizable policies for organizational requirements
 
 ![Checkov scan output showing passed/failed checks](img/image-5.png)
+![alt text](img/imageb.png)
+![alt text](img/image-1b.png)
+![alt text](img/image-2b.png)
+![alt text](img/image-3b.png)
+![alt text](img/image-4b.png)
+![alt text](img/image-5b.png)
+![alt text](img/image-6b.png)
+![alt text](img/image-7b.png)
+![alt text](img/image-8b.png)
+![alt text](img/image-9b.png)
+![alt text](img/image-10b.png)
 
 ---
 
@@ -306,7 +326,7 @@ terraform apply -auto-approve
 
 #### Step 4: Save Outputs
 
-**Important:** Copy these values - you'll need them later!
+**Important:** Copy these values ("aws_devops_core" = "aws-devops-core-XXXX") - you'll need them later!
 
 ```bash
 Apply complete! Resources: 63 added, 0 changed, 0 destroyed.
@@ -456,10 +476,10 @@ terraform -chdir=../../aws-devops-core output
 terraform -chdir=../../aws-devops-core output -json git_remote_s3_bucket_names | jq -r '."module_aws_tf_cicd"'
 ```
 
-Add remote (replace `module-aws-tf-cicd-XXXX` with your actual bucket name):
+Add remote (replace `your-s3-bucket-name` with your actual bucket name):
 
 ```bash
-git remote add origin s3+zip://module-aws-tf-cicd-XXXX/s3-repo
+git remote add origin s3+zip://your-s3-bucket-name/s3-repo
 ```
 
 **Important:** Include `/s3-repo` suffix - EventBridge looks for this pattern!
@@ -518,7 +538,9 @@ cd ../../example-production-workload
 
 ---
 
-#### Step 2: Configure provider.tf
+#### Step 2: Create and Configure provider.tf
+
+Open the provider.tf file located in the terraform-config/example-production-workload/provider.tf directory. Once there, paste the following configuration below the.
 
 Uncomment backend block and update with `example_production_workload_s3_bucket_name`:
 
@@ -554,11 +576,50 @@ Note: main.tf includes Checkov skip directives for non-critical findings
 
 #### Step 4: Create Tests
 
-**tests/main.tftest.hcl** - Integration tests validating:
+**tests/main.tftest.hcl** -- Integration tests validating:
 
 - IAM role naming conventions
 - Trust policy configuration
 - S3 bucket naming
+
+```hcl
+# HINT: Make sure to run `terraform init` in this directory before running `terraform test`. Also, ensure you use constant values (e.g. string, number, bool, etc.) within your tests where at all possible or you may encounter errors.
+
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}
+
+# - End-to-end Tests -
+run "integration_test" {
+  command = apply
+
+  # Using global variables defined above since additional variables block is not defined here
+  variables {
+    aws_region = "us-east-1"
+  }
+
+
+  # Assertions
+  # IAM Role - Ensure the role has the correct name, and trust policy after creation
+  assert {
+    condition     = startswith(aws_s3_bucket.example.id, "example-prod-resource")
+    error_message = "The IAM Role name (${aws_iam_role.example.name}) did not start with the expected value (example-prod-resource)."
+  }
+
+  assert {
+    condition     = jsondecode(aws_iam_role.example.assume_role_policy)["Statement"][0]["Principal"]["Service"] == "ec2.amazonaws.com"
+    error_message = "The IAM role trust policy (${aws_iam_role.example.assume_role_policy}) did not trust the expected service principal (ec2.amazonaws.com)"
+  }
+
+
+  # S3 - Ensure S3 Bucket have correct names after creation
+  assert {
+    condition     = startswith(aws_s3_bucket.example.id, "example-prod-resource")
+    error_message = "The S3 Remote State Bucket name (${aws_s3_bucket.example.id}) did not start with the expected value (example-prod-resource)."
+  }
+}
+```
 
 ---
 
@@ -774,7 +835,7 @@ In the `Manual_Approval` stage configuration, add the SNS notification:
 ```hcl
 configuration = {
    CustomData      = "Please approve this deployment."
-   NotificationArn = aws_sns_topic.manual_approval_sns_topic.arn
+   NotificationArn = aws_sns_topic.manual_approval_sns_topic.arn # Add this line
 }
 ```
 
