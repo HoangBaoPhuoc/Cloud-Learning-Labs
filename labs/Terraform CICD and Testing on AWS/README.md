@@ -1,20 +1,12 @@
 # Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS
 
-<<<<<<<< HEAD:labs/Terraform CICD and Testing on AWS/workshop/CICD and Testing on AWS - Workshop Writeup.md
-**Workshop Source:** AWS Workshop Studio  
-**Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing  
-**Level:** Intermediate  
-**Status:** COMPLETED
-========
 **Workshop Source:** AWS Workshop Studio
 **Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
 **Duration:** 5 hours  
 **Level:** Intermediate  
-**Status:** Completed
-
+**Status:** Completed  
 **Author:** HoangBaoPhuoc (phuochb)  
 **Co-author:** PNg-HA (Anh Pham)
->>>>>>>> c615154d14a25cb2ad4fbf8a86c62cfc3babf83e:labs/Terraform CICD and Testing on AWS/README.md
 
 ---
 
