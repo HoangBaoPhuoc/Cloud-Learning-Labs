@@ -1,6 +1,5 @@
 # Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS
 
-**Based on:** AWS Workshop Studio - Terraform CI/CD and Testing on AWS  
 **Focus:** Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
 **Duration:** 5 hours  
 **Level:** Intermediate  
