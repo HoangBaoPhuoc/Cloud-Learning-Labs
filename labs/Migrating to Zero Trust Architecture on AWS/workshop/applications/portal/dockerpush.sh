@@ -2,7 +2,7 @@
 
 # Configuration - Update these values
 AWS_REGION="ap-southeast-1"  # Your AWS Region
-AWS_ACCOUNT_ID="248508119228"  # Replace with your Frontend Account ID
+AWS_ACCOUNT_ID="123456789012"  # Replace with your Frontend Account ID
 ECR_REPO_NAME="frontend"  # ECR repository name
 AWS_PROFILE="frontend-account"  # AWS CLI SSO profile
 
