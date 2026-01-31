@@ -1,0 +1,46 @@
+# Network Account Configuration
+# RENAME this file to terraform.tfvars and fill in your values
+
+# ============================================
+# AWS Configuration
+# ============================================
+aws_region  = "ap-southeast-1"
+aws_profile = "network-account"
+
+# ============================================
+# Project Settings
+# ============================================
+project_name = "zerotrust-lab"
+environment  = "learning"
+
+# ============================================
+# AWS Organization
+# ============================================
+# Get from AWS Organizations console
+organization_id = "o-xxxxxxxxxx"
+
+# ============================================
+# Account IDs
+# ============================================
+# Frontend and Backend AWS Account IDs
+frontend_account = "111111111111"
+backend_account  = "222222222222"
+
+# ============================================
+# Route 53 Configuration
+# ============================================
+# Public hosted zone for Verified Access endpoint
+public_hosted_zone_id = "Z0123456789ABCDEFGHIJ"
+
+# Private hosted zone name for VPC Lattice services
+hosted_zone_name = "zerotrust.internal"
+
+# ============================================
+# Application Domain Names
+# ============================================
+# Frontend application domain (must have ACM cert)
+frontend_domain_name = "app.zerotrust.local"
+
+# Backend microservices domains (internal)
+backend_service1_domain_name = "mservice1.zerotrust.internal"
+backend_service2_domain_name = "mservice2.zerotrust.internal"
