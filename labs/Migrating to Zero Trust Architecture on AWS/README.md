@@ -130,6 +130,59 @@ frontend_domain_name = "zerotrust-lab.local"  # Use .local for self-signed
 
 ---
 
+### 🇻🇳 **Certificate Setup: .id.vn Domain (Free for VN Citizens)**
+
+#### Pros:
+- ✅ **Valid Public Certificate** - No browser warnings (Secure).
+- ✅ **Professional** - Real internet-accessible domain.
+- ✅ **Free Cost** - Supported by "Chương trình hiện diện trực tuyến với tên miền quốc gia .id.vn" (18-23 years old).
+
+#### Cons:
+- ⚠️ Registration process takes time (KYC).
+- ⚠️ Requires defined DNS management.
+
+#### Setup Steps:
+
+**Step 1: Register .id.vn Domain**
+- Register at Vietnamese Registrars (iNET, TenTen, MatBao, etc.) for `id.vn` program.
+- Example domain: `nguyenvan-zta.id.vn`.
+
+**Step 2: Create Public Hosted Zone in AWS**
+1. Login to **Network Account** (or Frontend Account).
+2. Go to **Route 53** > **Hosted zones** > **Create hosted zone**.
+3. Domain name: `nguyenvan-zta.id.vn`.
+4. Type: **Public hosted zone**.
+5. After creation, copy the 4 **Name Servers (NS)** in the NS record.
+6. Go to your Domain Registrar's management page and **Update Name Servers** to point to these 4 AWS NS values.
+
+**Step 3: Request Public Certificate**
+1. Login to **Frontend Account**.
+2. Go to **AWS Certificate Manager (ACM)** > **Request certificate**.
+3. Domain name: `*.nguyenvan-zta.id.vn` (or `app.nguyenvan-zta.id.vn`).
+4. Validation method: **DNS validation**.
+5. Click **Request**.
+6. Click on the Certificate ID > **Create records in Route 53**.
+   - *Note*: If Hosted Zone is in a different account (e.g. Network), you must manually add the CNAME Name and Value from ACM to the Route 53 Hosted Zone in the Network Account.
+
+**Step 4: Update terraform.tfvars**
+
+```hcl
+certificate_arn = "arn:aws:acm:ap-southeast-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+frontend_domain_name = "app.nguyenvan-zta.id.vn"
+```
+
+**Step 5: Add CNAME for Application (After Deployment)**
+After running Terraform (Task 5), you will get an output `verified_access_endpoint_domain` (e.g., `edge-123...amazonaws.com`).
+
+1. Go to **Route 53** (where your Hosted Zone is).
+2. Create Record:
+   - **Name**: `app` (or whatever subdomain you chose).
+   - **Type**: `CNAME`.
+   - **Value**: The value from `verified_access_endpoint_domain` output.
+   - **TTL**: 300.
+
+---
+
 ### Local Tools:
 
 - AWS CLI v2, Terraform ≥ 1.3.0, Docker installed
@@ -773,25 +826,37 @@ Since Task 1 was done manually, revert it manually in the Management Account (14
 
 #### Remove Account Assignments:
 
-1. Go to **AWS Accounts** > Select Network/Frontend/Backend accounts.
-2. Select the User/Group > **Remove access**.
+1. In IAM Identity Center, go to **AWS accounts** in the left sidebar.
+![Remove Account Assignments](img/zta-104-remove-account-assignments.png)
+2. Click on the **name of each account** (e.g., `ZT-Network-Account`) to open its details.
+![Remove Account Assignments](img/zta-104-remove-account-assignments-2.png)
+3. Under the **Users or groups** tab, check the box next to the assigned users/groups (e.g., `ZeroTrust-Admins`).
+![Remove Account Assignments](img/zta-104-remove-account-assignments-3.png)
+4. Click **Remove access** and confirm.
+5. Repeat for the other 2 accounts.
+![Remove Account Assignments](img/zta-104-remove-account-assignments-4.png)
 
 #### Delete Permission Sets:
 
 1. Go to **Permission sets** > Select `ZeroTrust-NetworkAdmin`, `ZeroTrust-AppDeveloper`, etc. > **Delete**.
+![Remove Account Assignments](img/zta-104-remove-account-assignments-5.png)
 
 #### Delete Users/Groups (Optional):
 
 - Delete `dev1` user and groups (`ZeroTrust-Admins`, `ZeroTrust-Developers`, `ZeroTrust-AppUsers`) if no longer needed.
+![Remove Account Assignments](img/zta-104-remove-account-assignments-6.png)
+![Remove Account Assignments](img/zta-104-remove-account-assignments-7.png)
 
 ### Step 5: Handling Member Accounts
 
-**Important**: You cannot "delete" the 3 AWS Member Accounts (ZT-Network, ZT-Frontend, ZT-Backend) immediately. They will remain in your Organization.
-
-**Recommendation**:
-
-- Keep them for future labs.
-- If you strictly need to close them, you must log in as Root User for each account and follow the "Close Account" procedure (takes 90 days to permanently delete).
+1. Go to **AWS Organizations**.
+2. Select the check box next to the member account name (e.g., `ZT-Backend-Account`).
+![Remove Account Assignments](img/zta-105-remove-account-assignments-1.png)
+3. Choose **Actions** > **Close**.
+![Remove Account Assignments](img/zta-105-remove-account-assignments-2.png)
+4. Follow the confirmation steps to close the account.
+![Remove Account Assignments](img/zta-105-remove-account-assignments-3.png)
+*   *Note: Closed accounts remain visible for a short time but are suspended immediately and permanently deleted after 90 days.*
 
 ---
 
@@ -808,16 +873,16 @@ Since Task 1 was done manually, revert it manually in the Management Account (14
 
 | Section                              | Status |
 | ------------------------------------ | ------ |
-| Task 1: Identity Center Setup        | ✅ / ✅ |
-| Task 2: CLI SSO Profiles             | ✅ / ✅ |
-| Task 3: Repo & Variables             | ✅ / ✅ |
-| Task 4: Networking Deploy            | ✅ / ✅ |
-| Task 5: Frontend Deploy + Build      | ✅ / ✅ |
-| Task 6: Backend Deploy + Build       | ✅ / ✅ |
-| Task 7: Verified Access Test         | ✅ / ✅ |
-| Task 8: Monitoring & Troubleshooting | ✅ / ✅ |
-| Task 9: Cost Optimization            | ✅ / ✅ |
-| Task 10: Cleanup                     | ✅ / ✅ |
+| Task 1: Identity Center Setup        | Complete |
+| Task 2: CLI SSO Profiles             | Complete |
+| Task 3: Repo & Variables             | Complete |
+| Task 4: Networking Deploy            | Complete |
+| Task 5: Frontend Deploy + Build      | Complete |
+| Task 6: Backend Deploy + Build       | Complete |
+| Task 7: Verified Access Test         | Complete |
+| Task 8: Monitoring & Troubleshooting | Complete |
+| Task 9: Cost Optimization            | Complete |
+| Task 10: Cleanup                     | Complete |
 
 ---
 

@@ -1,4 +1,4 @@
-# Mitigate Threats and Vulnerabilities with Security Command Center - Challenge Lab Writeup
+# Hands-On: Mitigate Threats and Vulnerabilities with Security Command Center - Challenge Lab Writeup
 
 **Lab Code:** GSP382  
 **Duration:** 40 minutes  
@@ -225,13 +225,11 @@ Export all SCC findings to a GCS bucket for long-term auditing and compliance pu
 
 | Task                             | Status      |
 | -------------------------------- | ----------- |
-| Task 1: Configure Environment    | ✅ Complete |
-| Task 2: Create Mute Rules        | ✅ Complete |
-| Task 3: Fix High Vulnerabilities | ✅ Complete |
-| Task 4: Web Security Scanning    | ✅ Complete |
-| Task 5: Export to GCS            | ✅ Complete |
-
-**Overall Score:** 100/100 ✅
+| Task 1: Configure Environment    |  Complete |
+| Task 2: Create Mute Rules        |  Complete |
+| Task 3: Fix High Vulnerabilities |  Complete |
+| Task 4: Web Security Scanning    |  Complete |
+| Task 5: Export to GCS            |  Complete |
 
 ---
 
