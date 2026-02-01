@@ -144,27 +144,40 @@ frontend_domain_name = "zerotrust-lab.local"  # Use .local for self-signed
 #### Setup Steps:
 
 **Step 1: Register .id.vn Domain**
-- Register at Vietnamese Registrars (iNET, TenTen, MatBao, etc.) for `id.vn` program.
-- Example domain: `nguyenvan-zta.id.vn`.
+- Register at Vietnamese Registrars (iNET, TenTen, MatBao, etc.) for the `id.vn` program.
+- **Example domain**: `nguyenvan-zta.id.vn`.
 
 **Step 2: Create Public Hosted Zone in AWS**
-1. Login to **Network Account** (or Frontend Account).
+1. Login to **Network Account** (Recommended) or *Frontend Account*.
 2. Go to **Route 53** > **Hosted zones** > **Create hosted zone**.
-3. Domain name: `nguyenvan-zta.id.vn`.
-4. Type: **Public hosted zone**.
-5. After creation, copy the 4 **Name Servers (NS)** in the NS record.
-6. Go to your Domain Registrar's management page and **Update Name Servers** to point to these 4 AWS NS values.
+3. **Domain name**: `nguyenvan-zta.id.vn` (Replace with your registered domain).
+4. **Type**: **Public hosted zone**.
+5. After creation, Route 53 will generate 4 **Name Servers (NS)** in the NS record.
+6. Copy these 4 NS values (e.g., `ns-123.awsdns-01.com`, etc.).
+7. Go to your **Domain Registrar's management page** (where you bought the domain) and **Update Name Servers** to point to these 4 AWS NS values.
 
 **Step 3: Request Public Certificate**
 1. Login to **Frontend Account**.
-2. Go to **AWS Certificate Manager (ACM)** > **Request certificate**.
-3. Domain name: `*.nguyenvan-zta.id.vn` (or `app.nguyenvan-zta.id.vn`).
-4. Validation method: **DNS validation**.
+2. Go to **AWS Certificate Manager (ACM)** > **Request certificate** > **Request a public certificate**.
+3. **Domain name**: `*.nguyenvan-zta.id.vn` (Wildcard is recommended) or `app.nguyenvan-zta.id.vn`.
+4. **Validation method**: **DNS validation**.
 5. Click **Request**.
-6. Click on the Certificate ID > **Create records in Route 53**.
-   - *Note*: If Hosted Zone is in a different account (e.g. Network), you must manually add the CNAME Name and Value from ACM to the Route 53 Hosted Zone in the Network Account.
+6. **Validate the Certificate**:
+   - Click on the Certificate ID you just created.
+   - **Option A (Same Account)**: If your Route 53 Hosted Zone is in the *same* account (Frontend), click **Create records in Route 53** > **Create records**.
+   - **Option B (Cross-Account - Recommended)**: If your Route 53 Hosted Zone is in the **Network Account**:
+     1. Copy the **CNAME name** and **CNAME value** from the ACM console.
+     2. Login to the **Network Account**.
+     3. Go to **Route 53** > **Hosted zones** > Select your domain.
+     4. Click **Create record**.
+     5. **Record name**: Paste the CNAME name (Note: If Route 53 auto-appends the domain, ensure you don't duplicate it. Usually, paste only the `_randomstring` part).
+     6. **Record type**: `CNAME`.
+     7. **Value**: Paste the CNAME value.
+     8. Click **Create records**.
 
 **Step 4: Update terraform.tfvars**
+
+Open the file `workshop/frontend/terraform.tfvars` and update the following variables:
 
 ```hcl
 certificate_arn = "arn:aws:acm:ap-southeast-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
@@ -174,9 +187,9 @@ frontend_domain_name = "app.nguyenvan-zta.id.vn"
 **Step 5: Add CNAME for Application (After Deployment)**
 After running Terraform (Task 5), you will get an output `verified_access_endpoint_domain` (e.g., `edge-123...amazonaws.com`).
 
-1. Go to **Route 53** (where your Hosted Zone is).
+1. Go to **Route 53** (in Network Account).
 2. Create Record:
-   - **Name**: `app` (or whatever subdomain you chose).
+   - **Name**: `app` (or whatever subdomain you chose in `frontend_domain_name`).
    - **Type**: `CNAME`.
    - **Value**: The value from `verified_access_endpoint_domain` output.
    - **TTL**: 300.
