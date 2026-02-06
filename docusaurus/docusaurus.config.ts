@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'AWS EKS Workshop',
+  title: 'Cloud Learning Labs',
   // tagline: 'Dinosaurs are cool',
   favicon: 'img/aws-logo.ico',
 
@@ -66,7 +66,7 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'AWS EKS Workshop',
+      title: 'Cloud Learning Labs',
       logo: {
         alt: 'My Site Logo',
         src: 'img/aws-logo.svg',
