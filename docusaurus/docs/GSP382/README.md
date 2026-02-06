@@ -1,0 +1,244 @@
+# Hands-On: Mitigate Threats and Vulnerabilities with Security Command Center - Challenge Lab Writeup
+
+**Lab Code:** GSP382  
+**Duration:** 40 minutes  
+**Level:** Intermediate  
+**Status:** Completed  
+**Author:** HoangBaoPhuoc (phuochb)  
+
+---
+
+## Overview
+
+This challenge lab tests proficiency in Google Cloud Security Command Center (SCC). The objective is to secure Cymbal Bank's Google Cloud environment by implementing threat detection, vulnerability mitigation, and compliance strategies without step-by-step guidance.
+
+---
+
+## Challenge Scenario
+
+**Cymbal Bank** is a major American retail bank with 2,000+ branches, founded in 1920. As a cloud security engineer, your task is to:
+
+- Secure the GCP environment using SCC features
+- Implement advanced threat detection and mitigation
+- Optimize access controls
+- Ensure compliance with industry regulations
+
+---
+
+## Task 1: Configure the Environment
+
+### Objective
+
+Set up baseline configurations for Security Command Center to implement robust security controls.
+
+### Steps
+
+1. Navigate to **Security > Security Command Center > Findings**
+2. Select **Last 180 days** from the time range selector
+3. Verify the active vulnerabilities graph displays
+
+**Important:** Always set the time range to **180 days** for all SCC interfaces throughout the challenge!
+
+## ![Task 1 - Security Command Center Findings Dashboard](img/{9F39F002-13D2-45F9-BEAD-7720A1A6C15D}.png)
+
+## Task 2: Create Static Mute Rules for Cymbal Bank
+
+### Objective
+
+Create three static mute rules to suppress non-critical findings that Cymbal Bank doesn't want to surface.
+
+### Mute Rules Configuration
+
+| Name                            | Finding Type           | Description                         |
+| ------------------------------- | ---------------------- | ----------------------------------- |
+| `muting-flow-log-findings`      | Flow logs disabled     | Mute VPC Flow Logs findings         |
+| `muting-audit-logging-findings` | Audit logging disabled | Mute audit logs findings            |
+| `muting-admin-sa-findings`      | Admin service account  | Mute admin service account findings |
+
+### Steps
+
+1. In SCC Findings, navigate to **Mute Rules**
+2. Click **Create Mute Rule** for each finding type
+3. Enter the rule name and finding query (found by exploring Finding details)
+4. Set the mute scope to cover the intended resources
+
+![Task 2 - Creating Mute Rules](img/{F17B2389-3F81-4985-9372-5E676DEA621A}.png)
+
+![Task 2 - Mute Rules Created](img/{938249CF-0E95-4849-B0FF-9A806E832EFB}.png)
+
+### Verification
+
+✅ All three mute rules successfully created and active
+
+---
+
+## Task 3: Analyze and Fix High Vulnerability Findings
+
+### Objective
+
+Identify and remediate two high-severity findings related to open ports:
+
+- **Open SSH port** (Port 22)
+- **Open RDP port** (Port 3389)
+
+### Solution Approach
+
+Ensure these ports are not exposed to the public internet. Use IP address `35.235.240.0/20` as a replacement for public-facing rules.
+
+### Steps
+
+1. In SCC Findings, filter for high-severity findings
+2. Identify findings related to open SSH and RDP ports
+3. Navigate to the affected Compute Engine instances or Firewall rules
+4. Modify firewall rules to restrict access to `35.235.240.0/20` instead of `0.0.0.0/0`
+
+![Task 3 - High Severity Findings](img/{BD1D6939-63B5-405D-82CA-60AD88BB01BC}.png)
+
+![Task 3 - Firewall Rule Modification](img/{7D4407F6-A584-42DB-87A0-6A358D0E0896}.png)
+
+![Task 3 - Findings Resolved](img/{5048BC2E-E43F-4E6C-B5B5-0B5BC3C430EA}.png)
+
+### Verification
+
+✅ Both open port vulnerabilities have been remediated
+✅ Firewall rules now restrict access to `35.235.240.0/20`
+
+---
+
+## Task 4: Identify Application Vulnerabilities with Web Security Scanner
+
+### Objective
+
+Run SCC's Web Security Scanner against a sample banking application to identify application-level vulnerabilities.
+
+### Prerequisites
+
+1. **Make External IP Static:**
+
+   - Navigate to **Compute Engine > VM instances > cls-vm**
+   - Click **Edit**
+   - In Network Interface, expand the default network
+   - Click "External IPv4 address" dropdown > **Reserve Static External IP**
+   - Name: `static-ip`
+   - Click **Reserve** and **Save**
+
+2. **Find the External IP** and note it
+
+### Running the Web Security Scan
+
+1. Access the application at: `http://<YOUR_EXTERNAL_IP>:8080`
+2. Verify the Cymbal Bank corporate banking portal loads
+
+![Task 4 - Cymbal Bank Web Application](img/{6D805705-C51D-4768-8E9C-25578E91C411}.png)
+
+3. In SCC, navigate to **Web Security Scanner** or **Security Scanning**
+4. Create a new scan with the application URL
+5. Run the scan and wait for completion
+
+![Task 4 - Web Security Scanner Configuration](img/{2149B327-EBA0-4E88-B33C-6F78C8253BBB}.png)
+
+![Task 4 - Scan Results](img/{0B2CA1A0-E497-460C-BCFB-4804620036C2}.png)
+
+### Verification
+
+✅ External IP successfully reserved as static
+✅ Web Security Scan completed successfully
+✅ Application vulnerabilities identified and reported
+
+---
+
+## Task 5: Export Findings to Google Cloud Storage
+
+### Objective
+
+Export all SCC findings to a GCS bucket for long-term auditing and compliance purposes.
+
+### Bucket Specifications
+
+- **Bucket Name:** `scc-export-bucket-<PROJECT_ID>`
+- **Location Type:** Regional
+- **Location:** [Your selected region]
+
+### Step 1: Create the Google Cloud Storage Bucket
+
+1. Navigate to **Cloud Storage > Buckets**
+2. Click **Create Bucket**
+3. Enter the bucket name: `scc-export-bucket-<PROJECT_ID>`
+4. Select **Regional** location type
+5. Choose your desired region
+
+![Task 5 - Bucket Creation Formt](img/{1666F2EB-94CF-407F-BFFD-BD5CBE638D69}.png)
+
+### Step 2: Configure Access Control
+
+1. In the **Choose how to control access to objects** section:
+
+   - Select **Prevent public access** option
+   - Check **Enforce public access prevention on this bucket**
+
+2. In the **Access control** section:
+   - **Uncheck** the "Enforce public access prevention" option
+   - Select **Fine-grained** access control to specify access to individual objects using object-level permissions (ACLs)
+
+![Task 5 - Fine-grained Access Control](img/{A8C99AA4-7D5E-41E2-B2FA-02027F7BBA3F}.png)
+
+3. Complete bucket creation by clicking **Create**
+
+![Task 5 - Bucket Successfully Created](img/{556D3967-B0DE-4928-B559-C4052B9B693A}.png)
+
+### Step 3: Configure SCC Export Settings
+
+1. In SCC Findings, click **Export** or navigate to **Settings > Exports**
+2. Create a new export destination
+3. Select the GCS bucket you created (`scc-export-bucket-<PROJECT_ID>`)
+4. Configure the export settings:
+   - **Filename:** `findings.jsonl`
+   - **Format:** JSONL
+   - **Time Range:** All time
+5. Initiate the export
+
+![Task 5 - Configuring Export Settings](img/{373D63A4-F78D-410E-9272-71651B309B0B}.png)
+
+![Task 5 - Export Completed](img/{6C664745-1E97-4D64-9657-646D554936E7}.png)
+
+### Verification
+
+✅ GCS bucket created with correct naming convention (`scc-export-bucket-<PROJECT_ID>`)
+✅ Public access prevention configured with fine-grained access control
+✅ Sample file uploaded and renamed to `findings.jsonl`
+✅ All findings exported to `findings.jsonl` in JSONL format
+✅ Export includes all findings from the entire time range
+
+---
+
+## Key Takeaways
+
+1. **Security Command Center** is a comprehensive platform for managing security posture in GCP
+2. **Mute Rules** help reduce alert fatigue by suppressing non-critical findings
+3. **Firewall hardening** is critical for reducing infrastructure vulnerabilities
+4. **Web Security Scanner** identifies application-level vulnerabilities
+5. **Finding exports** enable long-term compliance and audit trail maintenance
+
+---
+
+## Challenge Completion Status
+
+| Task                             | Status      |
+| -------------------------------- | ----------- |
+| Task 1: Configure Environment    |  Complete |
+| Task 2: Create Mute Rules        |  Complete |
+| Task 3: Fix High Vulnerabilities |  Complete |
+| Task 4: Web Security Scanning    |  Complete |
+| Task 5: Export to GCS            |  Complete |
+
+---
+
+## Additional Resources
+
+- [Google Cloud Security Command Center Documentation](https://cloud.google.com/security-command-center/docs)
+- [Web Security Scanner Guide](https://cloud.google.com/security-command-center/docs/using-web-security-scanner)
+- [Cloud Storage Best Practices](https://cloud.google.com/storage/docs/best-practices)
+
+---
+
+\_Challenge Lab completed successfully!

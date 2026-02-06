@@ -1,0 +1,50 @@
+# Backend Account Configuration
+# RENAME this file to terraform.tfvars and fill in your values
+
+# ============================================
+# AWS Configuration
+# ============================================
+aws_region          = "ap-southeast-1"
+aws_profile         = "backend-account"
+network_aws_profile = "network-account"
+
+# ============================================
+# Project Settings
+# ============================================
+project_name = "zerotrust-lab"
+environment  = "learning"
+
+# ============================================
+# Account IDs
+# ============================================
+# Network Account ID
+networking_account = "999999999999"
+
+# ============================================
+# ACM Certificate
+# ============================================
+# Certificate ARN for HTTPS on VPC Lattice services
+certificate_arn = "arn:aws:acm:ap-southeast-1:222222222222:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# ============================================
+# Application Domains
+# ============================================
+backend_service1_domain_name = "mservice1.zerotrust.internal"
+backend_service2_domain_name = "mservice2.zerotrust.internal"
+
+# ============================================
+# Frontend Application Role
+# ============================================
+# Get this ARN from Frontend Account terraform output
+frontend_application_role_arn = "arn:aws:iam::111111111111:role/frontend"
+
+# ============================================
+# ECS & Lambda Configuration (Tier 0 - Optimized for Lab)
+# ============================================
+ecs_task_cpu = "256"
+ecs_task_memory = "512"
+ecs_desired_count = 1
+ecs_min_capacity  = 1
+ecs_max_capacity  = 2
+lambda_memory_size = 128
+lambda_timeout = 30
