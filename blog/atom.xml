@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/blog</id>
-    <title>AWS EKS Workshop Blog</title>
+    <title>Cloud Learning Labs Blog</title>
     <updated>2021-08-01T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/blog"/>
-    <subtitle>AWS EKS Workshop Blog</subtitle>
+    <subtitle>Cloud Learning Labs Blog</subtitle>
     <icon>https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/img/aws-logo.ico</icon>
     <entry>
         <title type="html"><![CDATA[MDX Blog Post]]></title>
