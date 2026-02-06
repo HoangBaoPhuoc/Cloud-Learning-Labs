@@ -1399,4 +1399,4 @@ Verify all resources have been removed:
 
 - [HashiCorp Community Forum](https://discuss.hashicorp.com/)
 - [AWS re:Post](https://repost.aws/)
-- [Terraform Registry](img/https://registry.terraform.io/)
+- [Terraform Registry](https://registry.terraform.io/)
