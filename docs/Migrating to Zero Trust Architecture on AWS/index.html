@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Migrating to Zero Trust Architecture on AWS/README" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Hands-On: Migrating to a Zero Trust Architecture on AWS (Multi-Account + Identity Center) | AWS EKS Workshop</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/img/aws-logo.png"><meta data-rh="true" name="twitter:image" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/img/aws-logo.png"><meta data-rh="true" property="og:url" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Hands-On: Migrating to a Zero Trust Architecture on AWS (Multi-Account + Identity Center) | AWS EKS Workshop"><meta data-rh="true" name="description" content="Based on: aws-samples/moving-to-a-zero-trust-architecture-in-aws"><meta data-rh="true" property="og:description" content="Based on: aws-samples/moving-to-a-zero-trust-architecture-in-aws"><link data-rh="true" rel="icon" href="/Cloud-Learning-Labs/img/aws-logo.ico"><link data-rh="true" rel="canonical" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"><link data-rh="true" rel="alternate" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/" hreflang="en"><link data-rh="true" rel="alternate" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Migrating to Zero Trust Architecture","item":"https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"}]}</script><link rel="alternate" type="application/rss+xml" href="/Cloud-Learning-Labs/blog/rss.xml" title="AWS EKS Workshop RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/Cloud-Learning-Labs/blog/atom.xml" title="AWS EKS Workshop Atom Feed"><link rel="stylesheet" href="/Cloud-Learning-Labs/assets/css/styles.b7e2af40.css">
+<script src="/Cloud-Learning-Labs/assets/js/runtime~main.ab821c61.js" defer="defer"></script>
+<script src="/Cloud-Learning-Labs/assets/js/main.4f94325e.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Cloud-Learning-Labs/img/aws-logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Cloud-Learning-Labs/"><div class="navbar__logo"><img src="/Cloud-Learning-Labs/img/aws-logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Cloud-Learning-Labs/img/aws-logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">AWS EKS Workshop</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Cloud-Learning-Labs/docs/intro">Modules</a><a class="navbar__item navbar__link" href="/Cloud-Learning-Labs/contributor">Contributors</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/HoangBaoPhuoc/Cloud-Learning-Labs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cloud-Learning-Labs/docs/intro"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item hidden"><a class="menu__link" href="/Cloud-Learning-Labs/docs/GSP382/"><span title="GSP382" class="linkLabel_WmDU">GSP382</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"><span title="Migrating to Zero Trust Architecture" class="linkLabel_WmDU">Migrating to Zero Trust Architecture</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"><span title="Terraform CICD and Testing on AWS" class="linkLabel_WmDU">Terraform CICD and Testing on AWS</span></a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Cloud-Learning-Labs/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Migrating to Zero Trust Architecture</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Hands-On: Migrating to a Zero Trust Architecture on AWS (Multi-Account + Identity Center)</h1></header>
+<p><strong>Based on:</strong> aws-samples/moving-to-a-zero-trust-architecture-in-aws<br>
+<strong>Focus:</strong> Zero Trust, Verified Access, VPC Lattice, Multi-Account, IAM Identity Center, Terraform<br>
+<strong>Duration:</strong> 5 hours<br>
+<strong>Level:</strong> Intermediate<br>
+<strong>Status:</strong> Completed<br>
+<strong>Author:</strong> HoangBaoPhuoc (phuochb)<br>
+<strong>Co-author:</strong> PNg-HA (Anh Pham)</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview">Overview<a href="#overview" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h2>
+<p>This workshop guides you through building a Zero Trust architecture on AWS using Terraform across multiple AWS accounts. You will use AWS Verified Access for VPN-less access, Amazon VPC Lattice for service-to-service connectivity, and IAM Identity Center for centralized authentication and authorization.</p>
+<p>What you’ll build:</p>
+<ul>
+<li class="">Networking Account: VPC Lattice Service Network, Route 53 Profile/Private Hosted Zone, RAM sharing, and Parameter Store</li>
+<li class="">Frontend Account: VPC + ECS Fargate + ALB + ECR + Verified Access</li>
+<li class="">Backend Account: VPC + ECS (mservice1) + Lambda (mservice2) + ECR + VPC Lattice Services</li>
+</ul>
+<div class="language-mermaid codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-mermaid codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">graph TB</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    User((User))</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    subgraph &quot;Frontend Account&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        AVA[AWS Verified Access]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        ALB[Application Load Balancer]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Frontend[ECS Fargate: Frontend]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    end</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    subgraph &quot;Networking Account&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        LatticeSN[VPC Lattice Service Network]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        R53[Route 53 Profile &amp; RAM]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    end</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    subgraph &quot;Backend Account&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        subgraph &quot;VPC Lattice Services&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            LS1[Service: mservice1]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            LS2[Service: mservice2]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        end</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Backend1[ECS Fargate: mservice1]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        Backend2[Lambda: mservice2]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    end</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    User -- &quot;HTTPS (SSO)&quot; --&gt; AVA</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    AVA -- &quot;Forward&quot; --&gt; ALB</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    ALB --&gt; Frontend</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    Frontend -- &quot;Call mservice1/2&quot; --&gt; LatticeSN</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    LatticeSN -- &quot;Route&quot; --&gt; LS1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    LatticeSN -- &quot;Route&quot; --&gt; LS2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    LS1 --&gt; Backend1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    LS2 --&gt; Backend2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    R53 -. &quot;Shared via RAM&quot; .-&gt; LatticeSN</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="prerequisites">Prerequisites<a href="#prerequisites" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="aws-resources">AWS Resources:<a href="#aws-resources" class="hash-link" aria-label="Direct link to AWS Resources:" title="Direct link to AWS Resources:" translate="no">​</a></h3>
+<ul>
+<li class="">3 AWS accounts (Network, Frontend, Backend) in one Organization</li>
+<li class="">IAM Identity Center (AWS SSO) enabled in Management Account</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="certificate-setup-self-signed-certificate-lab-only">Certificate Setup: Self-Signed Certificate (Lab Only)<a href="#certificate-setup-self-signed-certificate-lab-only" class="hash-link" aria-label="Direct link to Certificate Setup: Self-Signed Certificate (Lab Only)" title="Direct link to Certificate Setup: Self-Signed Certificate (Lab Only)" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="pros">Pros:<a href="#pros" class="hash-link" aria-label="Direct link to Pros:" title="Direct link to Pros:" translate="no">​</a></h4>
+<ul>
+<li class=""><strong>100% Free</strong> - No domain purchase needed</li>
+<li class="">Quick setup (5 minutes)</li>
+<li class="">Works for learning and testing</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="cons">Cons:<a href="#cons" class="hash-link" aria-label="Direct link to Cons:" title="Direct link to Cons:" translate="no">​</a></h4>
+<ul>
+<li class="">⚠️ Browser warnings (must click &quot;Accept Risk&quot;)</li>
+<li class="">⚠️ Not suitable for production</li>
+<li class="">⚠️ AWS Verified Access may require additional configuration (handled in this guide)</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="setup-steps">Setup Steps:<a href="#setup-steps" class="hash-link" aria-label="Direct link to Setup Steps:" title="Direct link to Setup Steps:" translate="no">​</a></h4>
+<p><strong>Step 1: Generate Self-Signed Certificate</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Create directory (if not exists) and enter it</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">mkdir ~/certs; cd ~/certs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Generate Key and Certificate in ONE command (Universal syntax)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Note: We use *.zerotrust.local to make it clear this is a private/fake domain</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj &quot;/C=VN/ST=HCM/L=HCMC/O=DevOps/OU=Lab/CN=*.zerotrust.local&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">#If error you can try to implement the env of Git (in Windows)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$env:OPENSSL_CONF = &quot;C:\Program Files\Git\usr\ssl\openssl.cnf&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 3. Verify files exist</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ls</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Expected output: cert.pem, key.pem</span><br></span></code></pre></div></div>
+<p><strong>Step 2: Import to AWS Certificate Manager (ACM)</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws acm import-certificate \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --certificate fileb://cert.pem \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --private-key fileb://key.pem \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --region ap-southeast-1 \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --profile frontend-account</span><br></span></code></pre></div></div>
+<p><strong>Step 3: Copy the Certificate ARN</strong></p>
+<p>The command will output an ARN like:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">arn:aws:acm:ap-southeast-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span><br></span></code></pre></div></div>
+<p>Save this ARN for <code>terraform.tfvars</code>.</p>
+<p><strong>Step 4: Update terraform.tfvars</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">certificate_arn = &quot;arn:aws:acm:ap-southeast-1:123456789012:certificate/your-cert-id&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">frontend_domain_name = &quot;zerotrust-lab.local&quot;  # Use .local for self-signed</span><br></span></code></pre></div></div>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="certificate-setup-idvn-domain-free-for-vn-citizens">Certificate Setup: .id.vn Domain (Free for VN Citizens)<a href="#certificate-setup-idvn-domain-free-for-vn-citizens" class="hash-link" aria-label="Direct link to Certificate Setup: .id.vn Domain (Free for VN Citizens)" title="Direct link to Certificate Setup: .id.vn Domain (Free for VN Citizens)" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="pros-1">Pros:<a href="#pros-1" class="hash-link" aria-label="Direct link to Pros:" title="Direct link to Pros:" translate="no">​</a></h4>
+<ul>
+<li class="">✅ <strong>Valid Public Certificate</strong> - No browser warnings (Secure).</li>
+<li class="">✅ <strong>Professional</strong> - Real internet-accessible domain.</li>
+<li class="">✅ <strong>Free Cost</strong> - Supported by &quot;Chương trình hiện diện trực tuyến với tên miền quốc gia .id.vn&quot; (18-23 years old).</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="cons-1">Cons:<a href="#cons-1" class="hash-link" aria-label="Direct link to Cons:" title="Direct link to Cons:" translate="no">​</a></h4>
+<ul>
+<li class="">⚠️ Registration process takes time (KYC).</li>
+<li class="">⚠️ Requires defined DNS management.</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="setup-steps-1">Setup Steps:<a href="#setup-steps-1" class="hash-link" aria-label="Direct link to Setup Steps:" title="Direct link to Setup Steps:" translate="no">​</a></h4>
+<p><strong>Step 1: Register .id.vn Domain</strong></p>
+<ul>
+<li class="">Register at Vietnamese Registrars (iNET, TenTen, MatBao, etc.) for the <code>id.vn</code> program.</li>
+<li class=""><strong>Example domain</strong>: <code>nguyenvan-zta.id.vn</code>.</li>
+</ul>
+<p><strong>Step 2: Create Public Hosted Zone in AWS</strong></p>
+<ol>
+<li class="">Login to <strong>Network Account</strong> (Recommended) or <em>Frontend Account</em>.</li>
+<li class="">Go to <strong>Route 53</strong> &gt; <strong>Hosted zones</strong> &gt; <strong>Create hosted zone</strong>.</li>
+<li class=""><strong>Domain name</strong>: <code>nguyenvan-zta.id.vn</code> (Replace with your registered domain).</li>
+<li class=""><strong>Type</strong>: <strong>Public hosted zone</strong>.</li>
+<li class="">After creation, Route 53 will generate 4 <strong>Name Servers (NS)</strong> in the NS record.</li>
+<li class="">Copy these 4 NS values (e.g., <code>ns-123.awsdns-01.com</code>, etc.).</li>
+<li class="">Go to your <strong>Domain Registrar&#x27;s management page</strong> (where you bought the domain) and <strong>Update Name Servers</strong> to point to these 4 AWS NS values.</li>
+</ol>
+<p><strong>Step 3: Request Public Certificate</strong></p>
+<ol>
+<li class="">Login to <strong>Frontend Account</strong>.</li>
+<li class="">Go to <strong>AWS Certificate Manager (ACM)</strong> &gt; <strong>Request certificate</strong> &gt; <strong>Request a public certificate</strong>.</li>
+<li class=""><strong>Domain name</strong>: <code>*.nguyenvan-zta.id.vn</code> (Wildcard is recommended) or <code>app.nguyenvan-zta.id.vn</code>.</li>
+<li class=""><strong>Validation method</strong>: <strong>DNS validation</strong>.</li>
+<li class="">Click <strong>Request</strong>.</li>
+<li class=""><strong>Validate the Certificate</strong>:<!-- -->
+<ul>
+<li class="">Click on the Certificate ID you just created.</li>
+<li class=""><strong>Option A (Same Account)</strong>: If your Route 53 Hosted Zone is in the <em>same</em> account (Frontend), click <strong>Create records in Route 53</strong> &gt; <strong>Create records</strong>.</li>
+<li class=""><strong>Option B (Cross-Account - Recommended)</strong>: If your Route 53 Hosted Zone is in the <strong>Network Account</strong>:<!-- -->
+<ol>
+<li class="">Copy the <strong>CNAME name</strong> and <strong>CNAME value</strong> from the ACM console.</li>
+<li class="">Login to the <strong>Network Account</strong>.</li>
+<li class="">Go to <strong>Route 53</strong> &gt; <strong>Hosted zones</strong> &gt; Select your domain.</li>
+<li class="">Click <strong>Create record</strong>.</li>
+<li class=""><strong>Record name</strong>: Paste the CNAME name (Note: If Route 53 auto-appends the domain, ensure you don&#x27;t duplicate it. Usually, paste only the <code>_randomstring</code> part).</li>
+<li class=""><strong>Record type</strong>: <code>CNAME</code>.</li>
+<li class=""><strong>Value</strong>: Paste the CNAME value.</li>
+<li class="">Click <strong>Create records</strong>.</li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Step 4: Update terraform.tfvars</strong></p>
+<p>Open the file <code>workshop/frontend/terraform.tfvars</code> and update the following variables:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">certificate_arn = &quot;arn:aws:acm:ap-southeast-1:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">frontend_domain_name = &quot;app.nguyenvan-zta.id.vn&quot;</span><br></span></code></pre></div></div>
+<p><strong>Step 5: Add CNAME for Application (After Deployment)</strong>
+After running Terraform (Task 5), you will get an output <code>verified_access_endpoint_domain</code> (e.g., <code>edge-123...amazonaws.com</code>).</p>
+<ol>
+<li class="">Go to <strong>Route 53</strong> (in Network Account).</li>
+<li class="">Create Record:<!-- -->
+<ul>
+<li class=""><strong>Name</strong>: <code>app</code> (or whatever subdomain you chose in <code>frontend_domain_name</code>).</li>
+<li class=""><strong>Type</strong>: <code>CNAME</code>.</li>
+<li class=""><strong>Value</strong>: The value from <code>verified_access_endpoint_domain</code> output.</li>
+<li class=""><strong>TTL</strong>: 300.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="local-tools">Local Tools:<a href="#local-tools" class="hash-link" aria-label="Direct link to Local Tools:" title="Direct link to Local Tools:" translate="no">​</a></h3>
+<ul>
+<li class="">AWS CLI v2, Terraform ≥ 1.3.0, Docker installed</li>
+<li class="">Basic familiarity with Terraform and AWS IAM</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="workshop-scenario">Workshop Scenario<a href="#workshop-scenario" class="hash-link" aria-label="Direct link to Workshop Scenario" title="Direct link to Workshop Scenario" translate="no">​</a></h2>
+<p>You are a Cloud/Platform Engineer tasked with implementing a Zero Trust access model across multiple AWS accounts. Users must authenticate via IAM Identity Center to access a frontend app, which communicates with backend services via VPC Lattice. All infrastructure should be reproducible via Terraform and cost-optimized for a lab (tier 0).</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-1-identity-center-setup-configure-identity-management">Task 1: Identity Center Setup (Configure Identity Management)<a href="#task-1-identity-center-setup-configure-identity-management" class="hash-link" aria-label="Direct link to Task 1: Identity Center Setup (Configure Identity Management)" title="Direct link to Task 1: Identity Center Setup (Configure Identity Management)" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective">Objective<a href="#objective" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Set up IAM Identity Center on the Management account, create users, assign permissions, and grant access to member accounts (Network, Frontend, Backend).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="prerequisites-1">Prerequisites<a href="#prerequisites-1" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h3>
+<ul>
+<li class="">Logged into the Management account (1400).</li>
+<li class=""><strong>AWS Organizations Configured</strong>: 3 member accounts (ZT-Network-Account, ZT-Frontend-Account, ZT-Backend-Account) must be created via AWS Organizations service before starting this task.</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Create Accounts – to be added" src="/Cloud-Learning-Labs/assets/images/zta-00-accounts-1d654d1bd38071a09ec345404b776ff6.jpeg" width="1857" height="1019" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-create-groups-user-groups">Step 1: Create Groups (User Groups)<a href="#step-1-create-groups-user-groups" class="hash-link" aria-label="Direct link to Step 1: Create Groups (User Groups)" title="Direct link to Step 1: Create Groups (User Groups)" translate="no">​</a></h3>
+<p>Create 3 groups to categorize user roles within the organization.</p>
+<ol>
+<li class="">Navigate to <strong>IAM Identity Center Console</strong>.</li>
+<li class="">In the left menu, select <strong>Groups</strong> &gt; <strong>Create group</strong>.</li>
+<li class="">Create the following 3 groups:<!-- -->
+<ul>
+<li class=""><strong>Group 1</strong>: <code>ZeroTrust-Admins</code> (Network infrastructure administrators).</li>
+<li class=""><strong>Group 2</strong>: <code>ZeroTrust-Developers</code> (Application deployment developers).</li>
+<li class=""><strong>Group 3</strong>: <code>ZeroTrust-AppUsers</code> (End users accessing applications).</li>
+</ul>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Create Groups – to be added" src="/Cloud-Learning-Labs/assets/images/zta-11-groups-b1487f2a81508a410fdfad7243ade83e.jpg" width="1747" height="891" class="img_ev3q"></p>
+<ol start="4">
+<li class="">Verify that all groups have been created successfully.</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-create-users">Step 2: Create Users<a href="#step-2-create-users" class="hash-link" aria-label="Direct link to Step 2: Create Users" title="Direct link to Step 2: Create Users" translate="no">​</a></h3>
+<p>Create a primary User (Developer) for the lab and an optional secondary User (End User) for testing access.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="primary-user-admindev">Primary User (Admin/Dev):<a href="#primary-user-admindev" class="hash-link" aria-label="Direct link to Primary User (Admin/Dev):" title="Direct link to Primary User (Admin/Dev):" translate="no">​</a></h4>
+<ol>
+<li class="">In the left menu, select <strong>Users</strong> &gt; <strong>Add user</strong>.</li>
+<li class="">Fill in the user details:<!-- -->
+<ul>
+<li class=""><strong>Username</strong>: <code>dev1</code>.</li>
+<li class=""><strong>Password</strong>: Select <strong>Generate a one-time password...</strong> (to get password immediately).</li>
+<li class=""><strong>Email/Name</strong>: Enter your information.</li>
+</ul>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Create Users – to be added" src="/Cloud-Learning-Labs/assets/images/zta-12-users-create-cb98fd5cb06cd4f39ceb2ffd1e568c92.png" width="1859" height="954" class="img_ev3q"></p>
+<ol start="3">
+<li class=""><strong>Add user to groups</strong>:<!-- -->
+<ul>
+<li class="">Add user <code>dev1</code> to both groups: <code>ZeroTrust-Admins</code> and <code>ZeroTrust-Developers</code> (to grant full lab permissions).</li>
+<li class="">Click <strong>Add user</strong>.</li>
+</ul>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Create Users – to be added" src="/Cloud-Learning-Labs/assets/images/zta-12-users-implement-b7a47c316e94adee7b0981f784320ccd.png" width="1874" height="955" class="img_ev3q"></p>
+<ol start="4">
+<li class=""><strong>Save login information</strong>:<!-- -->
+<ul>
+<li class="">A dialog box will appear containing Portal URL, Username, and One-time password.</li>
+<li class=""><strong>IMPORTANT</strong>: Copy and save this information to a Note immediately. You will need it for subsequent tasks.</li>
+</ul>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Create Users – to be added" src="/Cloud-Learning-Labs/assets/images/zta-12-users-loginin4-2fd4a59592d09e959ac66aef5acc902b.png" width="1880" height="964" class="img_ev3q"></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="secondary-user-end-user---optional">Secondary User (End User - Optional):<a href="#secondary-user-end-user---optional" class="hash-link" aria-label="Direct link to Secondary User (End User - Optional):" title="Direct link to Secondary User (End User - Optional):" translate="no">​</a></h4>
+<ul>
+<li class="">Create an additional user <code>user1</code> and add only to the <code>ZeroTrust-AppUsers</code> group (for testing in Task 7).
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/zta-12-users-test-69ef4eb7d57d5466482d21cded194d9a.png" width="1878" height="956" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/zta-12-users-c2145e815c7dab947806354c3dbd74ca.png" width="1878" height="956" class="img_ev3q"></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-create-permission-sets">Step 3: Create Permission Sets<a href="#step-3-create-permission-sets" class="hash-link" aria-label="Direct link to Step 3: Create Permission Sets" title="Direct link to Step 3: Create Permission Sets" translate="no">​</a></h3>
+<p>Define permission sets to apply to AWS accounts.</p>
+<ol>
+<li class="">In the left menu, select <strong>Permission sets</strong> &gt; <strong>Create permission set</strong>.</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="permission-set-1-network-admin">Permission Set 1: Network Admin<a href="#permission-set-1-network-admin" class="hash-link" aria-label="Direct link to Permission Set 1: Network Admin" title="Direct link to Permission Set 1: Network Admin" translate="no">​</a></h4>
+<ol>
+<li class="">Select <strong>Predefined permission set</strong> &gt; <strong>AdministratorAccess</strong>.</li>
+<li class="">Name: <code>ZeroTrust-NetworkAdmin</code>.</li>
+<li class="">Description: <em>&quot;Full access for Network Account&quot;</em>.</li>
+<li class="">Click <strong>Create</strong>.
+<img decoding="async" loading="lazy" alt="Permission Sets – to be added" src="/Cloud-Learning-Labs/assets/images/zta-13-permission-networkadmin-1fd8b14d5b283b864835941ce2d6946d.png" width="1873" height="956" class="img_ev3q"></li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="permission-set-2-application-developer">Permission Set 2: Application Developer<a href="#permission-set-2-application-developer" class="hash-link" aria-label="Direct link to Permission Set 2: Application Developer" title="Direct link to Permission Set 2: Application Developer" translate="no">​</a></h4>
+<ol>
+<li class="">Select <strong>Predefined permission set</strong> &gt; <strong>PowerUserAccess</strong> (or <strong>AdministratorAccess</strong> to avoid permission issues).</li>
+<li class="">Name: <code>ZeroTrust-AppDeveloper</code>.</li>
+<li class="">Description: <em>&quot;Access for Frontend/Backend Accounts&quot;</em>.</li>
+<li class="">Note: For a smooth lab experience, you may attach additional policy <code>AmazonEC2ContainerRegistryFullAccess</code> (Inline policy) if needed, or simply use <code>AdministratorAccess</code> for this permission set to avoid permission errors during Terraform deployment.</li>
+<li class="">Click <strong>Create</strong>.</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Permission Sets – to be added" src="/Cloud-Learning-Labs/assets/images/zta-13-permission-sets-54fc6ccd21db83dbb0e0626344d617ce.png" width="1231" height="270" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-assign-accounts-assign-permissions-to-accounts">Step 4: Assign Accounts (Assign Permissions to Accounts)<a href="#step-4-assign-accounts-assign-permissions-to-accounts" class="hash-link" aria-label="Direct link to Step 4: Assign Accounts (Assign Permissions to Accounts)" title="Direct link to Step 4: Assign Accounts (Assign Permissions to Accounts)" translate="no">​</a></h3>
+<p>This step maps: <strong>Who (Group) + What permissions (Permission Set) + To which account (Account)</strong>.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-for-network-account">Configuration for Network Account:<a href="#configuration-for-network-account" class="hash-link" aria-label="Direct link to Configuration for Network Account:" title="Direct link to Configuration for Network Account:" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p>In the left menu, select <strong>AWS accounts</strong>.</p>
+<p><strong>Note</strong>: If you do not see your accounts immediately, ensure you expand the Root hierarchy or the specific Organizational Unit (OU) folder in the list view.</p>
+</li>
+<li class="">
+<p>Select the <code>ZT-Network-Account</code>.</p>
+</li>
+<li class="">
+<p>Click <strong>Assign users or groups</strong>.</p>
+</li>
+<li class="">
+<p>Select the <strong>Groups</strong> tab &gt; Select <code>ZeroTrust-Admins</code>.</p>
+</li>
+<li class="">
+<p>Click <strong>Next</strong> &gt; Select Permission Set <code>ZeroTrust-NetworkAdmin</code>.</p>
+</li>
+<li class="">
+<p>Click <strong>Submit</strong>.</p>
+</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Assign Accounts – to be added" src="/Cloud-Learning-Labs/assets/images/zta-14-assign-accounts-ztna-config-group-f4a2e2a26f634e5e52f2641a9e06a540.png" width="1873" height="956" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Assign Accounts – to be added" src="/Cloud-Learning-Labs/assets/images/zta-14-assign-accounts-ztna-config-permission-3084368c4fcd1541a1510f9ddc7784d4.png" width="1873" height="956" class="img_ev3q"></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-for-frontend--backend-account">Configuration for Frontend &amp; Backend Account:<a href="#configuration-for-frontend--backend-account" class="hash-link" aria-label="Direct link to Configuration for Frontend &amp; Backend Account:" title="Direct link to Configuration for Frontend &amp; Backend Account:" translate="no">​</a></h4>
+<ol>
+<li class="">Select both accounts <code>ZT-Frontend-Account</code> and <code>ZT-Backend-Account</code>.</li>
+<li class="">Click <strong>Assign users or groups</strong>.</li>
+<li class="">Select the <strong>Groups</strong> tab &gt; Select <code>ZeroTrust-Developers</code>.</li>
+<li class="">Click <strong>Next</strong> &gt; Select Permission Set <code>ZeroTrust-AppDeveloper</code> (or <code>ZeroTrust-NetworkAdmin</code> if you prefer to grant full Admin permissions for convenience).</li>
+<li class="">Click <strong>Submit</strong>.</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Assign Accounts – to be added" src="/Cloud-Learning-Labs/assets/images/zta-14-assign-accounts-a5695d79d7437550364f8b1844aa93c7.png" width="1747" height="891" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-5-verify-access-crucial">Step 5: Verify Access (Crucial)<a href="#step-5-verify-access-crucial" class="hash-link" aria-label="Direct link to Step 5: Verify Access (Crucial)" title="Direct link to Step 5: Verify Access (Crucial)" translate="no">​</a></h3>
+<p>Verify that the configuration is working correctly by logging in as the new user.</p>
+<ol>
+<li class="">Open a <strong>Private/Incognito browser window</strong>.</li>
+<li class="">Navigate to the <strong>AWS Access Portal URL</strong> (saved in Step 2, e.g., <code>https://d-xxxxxxxx.awsapps.com/start</code>).</li>
+<li class="">Log in using:<!-- -->
+<ul>
+<li class=""><strong>Username</strong>: <code>dev1</code></li>
+<li class=""><strong>Password</strong>: The one-time password saved earlier.</li>
+</ul>
+</li>
+<li class="">You will be prompted to set a new password.</li>
+<li class=""><strong>Success Criteria</strong>: You should see the AWS Access Portal dashboard listing all 3 accounts: ZT-Network, ZT-Frontend, and ZT-Backend.</li>
+<li class="">Click on <strong>ZT-Network-Account</strong> &gt; <strong>Management Console</strong> to confirm you can access the AWS Console.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-2-configure-aws-cli-with-sso">Task 2: Configure AWS CLI with SSO<a href="#task-2-configure-aws-cli-with-sso" class="hash-link" aria-label="Direct link to Task 2: Configure AWS CLI with SSO" title="Direct link to Task 2: Configure AWS CLI with SSO" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-1">Objective<a href="#objective-1" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Set up local AWS CLI profiles (<code>network-account</code>, <code>frontend-account</code>, <code>backend-account</code>) to authenticate via IAM Identity Center. This allows Terraform to deploy resources into the correct accounts.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="prerequisites-2">Prerequisites<a href="#prerequisites-2" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>SSO Start URL</strong>: Retrieved from Task 1 (e.g., <code>https://d-xxxxxxxx.awsapps.com/start</code>).</li>
+<li class=""><strong>Region</strong>: <code>ap-southeast-1</code> (Singapore).</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-configure-network-account-profile">Step 1: Configure Network Account Profile<a href="#step-1-configure-network-account-profile" class="hash-link" aria-label="Direct link to Step 1: Configure Network Account Profile" title="Direct link to Step 1: Configure Network Account Profile" translate="no">​</a></h3>
+<p>Run the configuration wizard to set up the SSO session and the first profile.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws configure sso</span><br></span></code></pre></div></div>
+<p>Input details when prompted:</p>
+<ol>
+<li class=""><strong>SSO session name (Recommended)</strong>: <code>zerotrust-lab</code> (Use this name to group all accounts under one login session).</li>
+<li class=""><strong>SSO start URL</strong>: Enter your URL from Task 1.</li>
+<li class=""><strong>SSO region</strong>: <code>ap-southeast-1</code>.</li>
+<li class=""><strong>SSO registration scopes [sso:account<!-- -->:access<!-- -->]</strong>: Press Enter (Default).</li>
+<li class="">(Browser will open → Click <strong>&quot;Confirm and continue&quot;</strong> → <strong>&quot;Allow&quot;</strong>)</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="AWS Configure SSO – to be added" src="/Cloud-Learning-Labs/assets/images/zta-21-configure-sso-session-f0c1fd13117ef6b0dd15afaec476a4a3.png" width="1253" height="264" class="img_ev3q"></p>
+<ol start="6">
+<li class=""><strong>Select Account</strong>: Select <code>ZT-Network-Account</code> using arrow keys.</li>
+<li class=""><strong>Select Role</strong>: Select the admin role (e.g., <code>ZeroTrust-NetworkAdmin</code> or <code>AdministratorAccess</code>).</li>
+<li class=""><strong>CLI default client Region</strong>: <code>ap-southeast-1</code>.</li>
+<li class=""><strong>CLI default output format</strong>: <code>json</code>.</li>
+<li class=""><strong>CLI profile name</strong>: <code>network-account</code> (<strong>CRITICAL</strong>: Must match this exact name).</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-configure-frontend-and-backend-profiles">Step 2: Configure Frontend and Backend Profiles<a href="#step-2-configure-frontend-and-backend-profiles" class="hash-link" aria-label="Direct link to Step 2: Configure Frontend and Backend Profiles" title="Direct link to Step 2: Configure Frontend and Backend Profiles" translate="no">​</a></h3>
+<p>Repeat the process for the remaining accounts. Since the session <code>zerotrust-lab</code> is already created, the wizard will be shorter.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="for-frontend-account">For Frontend Account:<a href="#for-frontend-account" class="hash-link" aria-label="Direct link to For Frontend Account:" title="Direct link to For Frontend Account:" translate="no">​</a></h4>
+<ol>
+<li class="">Run <code>aws configure sso</code>.</li>
+<li class=""><strong>SSO session name</strong>: Select <code>zerotrust-lab</code> (Press Enter).</li>
+<li class=""><strong>Select Account</strong>: Choose <code>ZT-Frontend-Account</code>.</li>
+<li class=""><strong>Select Role</strong>: Choose the available role (e.g., <code>ZeroTrust-AppDeveloper</code>).</li>
+<li class=""><strong>CLI profile name</strong>: <code>frontend-account</code> (Must match exactly).</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="for-backend-account">For Backend Account:<a href="#for-backend-account" class="hash-link" aria-label="Direct link to For Backend Account:" title="Direct link to For Backend Account:" translate="no">​</a></h4>
+<ol>
+<li class="">Run <code>aws configure sso</code>.</li>
+<li class=""><strong>SSO session name</strong>: Select <code>zerotrust-lab</code>.</li>
+<li class=""><strong>Select Account</strong>: Choose <code>ZT-Backend-Account</code>.</li>
+<li class=""><strong>Select Role</strong>: Choose the available role.</li>
+<li class=""><strong>CLI profile name</strong>: <code>backend-account</code> (Must match exactly).</li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="SSO Browser Login – to be added" src="/Cloud-Learning-Labs/assets/images/zta-22-sso-login-full-config-a25de7c6f89e9d1f2bebb106c9a5c16f.png" width="1294" height="781" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-verify-configuration">Step 3: Verify Configuration<a href="#step-3-verify-configuration" class="hash-link" aria-label="Direct link to Step 3: Verify Configuration" title="Direct link to Step 3: Verify Configuration" translate="no">​</a></h3>
+<p>Ensure that the config file contains 3 distinct profiles and 1 SSO session.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># On Linux/Mac</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cat ~/.aws/config</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># On Windows PowerShell</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Get-Content $env:USERPROFILE\.aws\config</span><br></span></code></pre></div></div>
+<p><strong>Expected Output</strong>: You should see <code>[profile network-account]</code>, <code>[profile frontend-account]</code>, and <code>[profile backend-account]</code>.</p>
+<p><img decoding="async" loading="lazy" alt="SSO Browser Login – to be added" src="/Cloud-Learning-Labs/assets/images/zta-22-sso-login-check-8b72bcfef24d142afce7e0168721b17e.png" width="530" height="363" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-login-to-activate-sessions">Step 4: Login to Activate Sessions<a href="#step-4-login-to-activate-sessions" class="hash-link" aria-label="Direct link to Step 4: Login to Activate Sessions" title="Direct link to Step 4: Login to Activate Sessions" translate="no">​</a></h3>
+<p>Before running Terraform, ensure you have active credentials for all profiles.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Login to the named profiles (This will refresh the token for the zerotrust-lab session)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile network-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile backend-account</span><br></span></code></pre></div></div>
+<p><strong>Note</strong>: Since they share the <code>zerotrust-lab</code> session, logging into one usually refreshes access for all associated accounts.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-3-prepare-repository--variables">Task 3: Prepare Repository &amp; Variables<a href="#task-3-prepare-repository--variables" class="hash-link" aria-label="Direct link to Task 3: Prepare Repository &amp; Variables" title="Direct link to Task 3: Prepare Repository &amp; Variables" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-2">Objective<a href="#objective-2" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Clone the repo and prepare terraform.tfvars from examples.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps">Steps<a href="#steps" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Direct to the folder workshop:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd Cloud-Learning-Labs\labs\Migrating to Zero Trust Architecture on AWS\workshop</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Create and fill tfvars files from provided examples:</p>
+<blockquote>
+<p><strong>Action</strong>: Copy the <code>terraform.tfvars.example</code> file in each folder to <code>terraform.tfvars</code>.</p>
+</blockquote>
+<blockquote>
+<p><strong>Note</strong>: Retrieve these IDs from your AWS Console:</p>
+<ul>
+<li class=""><strong>Organization ID</strong>: AWS Organizations console.</li>
+<li class=""><strong>Account IDs</strong>: AWS Organizations or Account dropdown menu.</li>
+<li class=""><strong>Group ID</strong>: IAM Identity Center console (Groups tab).
+<img decoding="async" loading="lazy" alt="Fill tfvars files" src="/Cloud-Learning-Labs/assets/images/organization_id-b2086c452e015ce5bdcb2055bb51203a.jpeg" width="1848" height="1011" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Fill tfvars files" src="/Cloud-Learning-Labs/assets/images/account_id-25bd8637c903b3c3192a76f6f1b838d3.jpeg" width="915" height="212" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Fill tfvars files" src="/Cloud-Learning-Labs/assets/images/group_id-6eb80f8d04845b70115058e5caf66cd4.png" width="1876" height="956" class="img_ev3q"></li>
+</ul>
+</blockquote>
+<ul>
+<li class=""><code>network/terraform.tfvars</code> → <code>organization_id</code>, hosted zones, account IDs</li>
+<li class=""><code>frontend/terraform.tfvars</code> → <code>certificate_arn</code>, <code>frontend_domain_name</code>, <code>idc_group_id</code></li>
+<li class=""><code>backend/terraform.tfvars</code> → <code>certificate_arn</code>, <code>frontend_application_role_arn</code> (Wait for Task 5 output)</li>
+</ul>
+</li>
+<li class="">
+<p>Confirm providers use SSO profiles and region <code>ap-southeast-1</code>.</p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-4-deploy-networking-account">Task 4: Deploy Networking Account<a href="#task-4-deploy-networking-account" class="hash-link" aria-label="Direct link to Task 4: Deploy Networking Account" title="Direct link to Task 4: Deploy Networking Account" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-3">Objective<a href="#objective-3" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Create VPC Lattice Service Network, Route 53 Profile/PHZ, and share via RAM.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps-1">Steps<a href="#steps-1" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<p>Before apply you must enable RAM sharing with AWS Organizations
+<img decoding="async" loading="lazy" alt="Deploy Networking" src="/Cloud-Learning-Labs/assets/images/config-enable-sharing-AWS-e6177bf0676cab6a453cc7d1d0fd871b.png" width="1874" height="671" class="img_ev3q"></p>
+<ol>
+<li class="">
+<p>Login SSO and deploy:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile network-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd workshop/network/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform output &gt; ../network-outputs.txt</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform Apply (Network) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-41-network-apply-a9c044ecebb5071a644e646d2a029fec.png" width="878" height="173" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Terraform Apply (Network) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-41-network-output-aad800733deab8f4e05e7a0640858be5.png" width="1079" height="128" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Note outputs for later: <code>vpc_lattice_service_network_arn</code>, <code>route53_profile_id</code>.</p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-5-deploy-frontend-account--build-app">Task 5: Deploy Frontend Account + Build App<a href="#task-5-deploy-frontend-account--build-app" class="hash-link" aria-label="Direct link to Task 5: Deploy Frontend Account + Build App" title="Direct link to Task 5: Deploy Frontend Account + Build App" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-4">Objective<a href="#objective-4" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Provision VPC, ECS, ALB, ECR, Verified Access; push frontend image to ECR.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps-2">Steps<a href="#steps-2" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Deploy infrastructure:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../frontend/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform output &gt; ../frontend-outputs.txt</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform Apply (Frontend) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-51-frontend-apply-419e8b1363e4964e4a88a06d47fab222.png" width="1015" height="178" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Terraform Apply (Frontend) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-51-frontend-apply-output-d0cefbdd5e32b8e0a83520e1460ab953.png" width="1142" height="140" class="img_ev3q">
+Outputs to capture: <code>ecr_repository_url</code>, <code>verified_access_endpoint_url</code>, <code>frontend_task_role_arn</code>.</p>
+</li>
+<li class="">
+<p>Build &amp; push frontend image:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># For linux or mac</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../applications/portal/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">chmod +x dockerpush.sh</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">./dockerpush.sh</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># For windows (PowerShell)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Move to folder containing code</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd &quot;..\applications\portal&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Declare variables (Replace with your values)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_REGION = &quot;ap-southeast-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># To get ID: aws sts get-caller-identity --query Account --output text --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_ACCOUNT_ID = &quot;123456789012&quot;     # Replace with your Frontend Account ID</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ECR_REPO_NAME = &quot;frontend&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_PROFILE = &quot;frontend-account&quot;    # Replace with your SSO profile name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 3. Login ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Note: Using &#x27;cmd /C&#x27; to avoid PowerShell pipe encoding issues</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cmd /C &quot;aws ecr get-login-password --region $AWS_REGION --profile $AWS_PROFILE | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 4. Build Image</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker build -t $ECR_REPO_NAME .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 5. Tag &amp; Push</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker tag &quot;$ECR_REPO_NAME`:latest&quot; &quot;$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME`:latest&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker push &quot;$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME`:latest&quot;</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="ECR Push – to be added" src="/Cloud-Learning-Labs/assets/images/zta-52-ecr-push-frontend-9c07cca17a425bfcae051618029d5d30.png" width="1147" height="649" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Force new ECS deployment to pull latest image:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws ecs update-service --cluster frontend --service frontend --force-new-deployment --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Check service status</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecs describe-services --cluster frontend --services frontend --profile frontend-account --query &quot;services[0].{Status:status, Running:runningCount, Desired:desiredCount, Events:events[0].message}&quot;</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="ECS Service – to be added" src="/Cloud-Learning-Labs/assets/images/zta-53-ecs-service-check-7af6e90ed3ecd02af9756fa41765e095.png" width="1147" height="175" class="img_ev3q"></p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-6-deploy-backend-account--build-services">Task 6: Deploy Backend Account + Build Services<a href="#task-6-deploy-backend-account--build-services" class="hash-link" aria-label="Direct link to Task 6: Deploy Backend Account + Build Services" title="Direct link to Task 6: Deploy Backend Account + Build Services" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-5">Objective<a href="#objective-5" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Provision VPC, ECS (mservice1), Lambda (mservice2), and Lattice Services; push image and update function.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps-3">Steps<a href="#steps-3" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Update <code>backend/terraform.tfvars</code> with <code>frontend_application_role_arn</code> from Task 5.</p>
+</li>
+<li class="">
+<p>Deploy infrastructure:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws sso login --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../../backend/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform output &gt; ../backend-outputs.txt</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform Apply (Backend) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-62-backend-apply-644c97d9b51c00110f3c7d56b29722ee.png" width="787" height="165" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Terraform Apply (Backend) – to be added" src="/Cloud-Learning-Labs/assets/images/zta-62-backend-output-3a4e580bae6832f2fdf6b46892d2d7b2.png" width="848" height="122" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Build &amp; push mservice1:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># For linux or mac</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../applications/mservice1/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">chmod +x dockerpush.sh</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">./dockerpush.sh</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># For windows (PowerShell)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Move to folder containing code</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd &quot;..\applications\mservice1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Declare variables (Replace with your values)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_REGION = &quot;ap-southeast-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># To get ID: aws sts get-caller-identity --query Account --output text --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_ACCOUNT_ID = &quot;123456789012&quot;     # Replace with your Backend Account ID</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$ECR_REPO_NAME = &quot;mservice1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$AWS_PROFILE = &quot;backend-account&quot;     # Replace with your SSO profile name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 3. Login ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Note: Using &#x27;cmd /C&#x27; to avoid PowerShell pipe encoding issues</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cmd /C &quot;aws ecr get-login-password --region $AWS_REGION --profile $AWS_PROFILE | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 4. Build Image</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker build -t $ECR_REPO_NAME .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 5. Tag &amp; Push</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker tag &quot;$ECR_REPO_NAME`:latest&quot; &quot;$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME`:latest&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker push &quot;$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO_NAME`:latest&quot;</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="ECR Push – to be added" src="/Cloud-Learning-Labs/assets/images/zta-63-ecr-push-mservice1-1282a152ad4e9c009f8149e8beaa3bc8.png" width="1141" height="720" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Force new ECS deployment to pull latest image:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">aws ecs update-service --cluster mservice1 --service mservice1 --force-new-deployment --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Check service status</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecs describe-services --cluster mservice1 --services mservice1 --profile backend-account --query &quot;services[0].{Status:status, Running:runningCount, Desired:desiredCount, Events:events[0].message}&quot;</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="ECS Service – to be added" src="/Cloud-Learning-Labs/assets/images/zta-63-ecs-service-check-507f64e2b778873683c58bc05eecd6f4.png" width="1145" height="187" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Update Lambda mservice2 code (if needed):</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># For linux or mac</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../mservice2/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">zip -r mservice2.zip app2.py requirements.txt</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws lambda update-function-code \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --function-name &lt;lambda_name&gt; \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --zip-file fileb://mservice2.zip \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># For windows (PowerShell)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd &quot;..\mservice2&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Zip file code</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Compress-Archive -Path app2lambda.py -DestinationPath mservice2.zip -Force</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Update code to lambda</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws lambda update-function-code --function-name mservice2 --zip-file fileb://mservice2.zip --profile backend-account</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Lambda Update – to be added" src="/Cloud-Learning-Labs/assets/images/zta-64-lambda-update-bf7f74563d874289a5ca9c7b11419ef1.png" width="1142" height="779" class="img_ev3q"></p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-7-verified-access-test">Task 7: Verified Access Test<a href="#task-7-verified-access-test" class="hash-link" aria-label="Direct link to Task 7: Verified Access Test" title="Direct link to Task 7: Verified Access Test" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-6">Objective<a href="#objective-6" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Verify login flow with IAM Identity Center and access to the frontend app.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps-4">Steps<a href="#steps-4" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>Ensure Verified Access policy references correct <code>idc_group_id</code>.<br>
+<img decoding="async" loading="lazy" alt="Verified Access Policy – to be added" src="/Cloud-Learning-Labs/assets/images/zta-71-verified-access-policy-06d10232c8d2822b47ec6a63a01c9757.png" width="1877" height="650" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Verified Access Policy – to be added" src="/Cloud-Learning-Labs/assets/images/zta-71-verified-access-policy-terraform-3623c6ee5aa3154474a35344e9f01258.png" width="1047" height="538" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Open the Verified Access endpoint URL (from Task 5 outputs) or your frontend domain.</p>
+<p><strong>Important:</strong> Since we are using a self-signed certificate with a local domain (<code>app.zerotrust.local</code>), public DNS cannot resolve this domain. You must map it in your local <code>hosts</code> file.</p>
+<p><strong>Step 2a: Get the IP address of the Verified Access Endpoint</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Use the verified_access_endpoint_domain from Task 5 outputs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">nslookup &lt;your-verified-access-endpoint&gt;.edge-0fb...amazonaws.com</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Copy one of the IP addresses returned (e.g., 18.1.2.3)</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="NSLookup – to be added" src="/Cloud-Learning-Labs/assets/images/zta-72-nslookup-66050d45f4fa95dabb5ee1e8e02787c6.png" width="925" height="195" class="img_ev3q">
+<strong>Step 2b: Update <code>hosts</code> file</strong></p>
+<p><strong>For Windows:</strong></p>
+<ul>
+<li class="">Open Notepad as Administrator.</li>
+<li class="">Open file: <code>C:\Windows\System32\drivers\etc\hosts</code></li>
+<li class="">Add the line:<!-- -->
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">52.220.156.117 app.zerotrust.local</span><br></span></code></pre></div></div>
+</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Config hosts – to be added" src="/Cloud-Learning-Labs/assets/images/zta-72-config-hosts-4f21480438420c5f7982509be8507191.png" width="791" height="685" class="img_ev3q">
+<strong>For Linux/macOS:</strong></p>
+<ul>
+<li class="">
+<p>Open terminal.</p>
+</li>
+<li class="">
+<p>Edit hosts file: <code>sudo nano /etc/hosts</code></p>
+</li>
+<li class="">
+<p>Add the line:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">52.220.156.117 app.zerotrust.local</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p>Access URL: <a href="https://app.zerotrust.local" target="_blank" rel="noopener noreferrer" class="">https://app.zerotrust.local</a>
+<img decoding="async" loading="lazy" alt="SSO Redirect – to be added" src="/Cloud-Learning-Labs/assets/images/zta-72-sso-redirect-10deccdeaa75edbba0c23d2cd82dbbf8.png" width="1919" height="1032" class="img_ev3q"></p>
+</li>
+</ul>
+</li>
+<li class="">
+<p>Login with a user in <code>ZeroTrust-AppUsers</code> and validate application access.<br>
+<img decoding="async" loading="lazy" alt="App after login – to be added" src="/Cloud-Learning-Labs/assets/images/zta-73-app-login-5906332af209862c2e141030421cf8d9.png" width="1747" height="1824" class="img_ev3q"></p>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-8-monitoring--troubleshooting">Task 8: Monitoring &amp; Troubleshooting<a href="#task-8-monitoring--troubleshooting" class="hash-link" aria-label="Direct link to Task 8: Monitoring &amp; Troubleshooting" title="Direct link to Task 8: Monitoring &amp; Troubleshooting" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-7">Objective<a href="#objective-7" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Confirm end-to-end connectivity and inspect logs.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps-5">Steps<a href="#steps-5" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p>End-to-end path: Frontend (ECS) → mservice1 (ECS) → mservice2 (Lambda) via VPC Lattice.</p>
+</li>
+<li class="">
+<p>Useful CloudWatch log tails:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Frontend</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws logs tail /ecs/frontend --follow --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Backend ECS</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws logs tail /ecs/mservice1 --follow --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Backend Lambda</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws logs tail /aws/lambda/mservice2 --follow --profile backend-account</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="CloudWatch Logs – to be added" src="/Cloud-Learning-Labs/assets/images/zta-81-cloudwatch-frontend-506c1d1ce0ac4aaf0d86357f97ab3076.png" width="912" height="515" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="CloudWatch Logs – to be added" src="/Cloud-Learning-Labs/assets/images/zta-81-cloudwatch-backend-82494f04a5a435eeafa9894e8ec8d450.png" width="912" height="468" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="CloudWatch Logs – to be added" src="/Cloud-Learning-Labs/assets/images/zta-81-cloudwatch-lambda-d933d89ade72626cc353b3a0f0269a36.png" width="908" height="513" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Quick tips:</p>
+<ul>
+<li class="">ECS task not starting:<!-- -->
+<ul>
+<li class="">Check security groups, subnets, IAM roles (especially CloudWatch Logs permissions as guided in Task 5).</li>
+<li class="">Review detailed logs in CloudWatch Logs to identify permission or network errors.</li>
+</ul>
+</li>
+<li class="">Verified Access deny/redirect issues: check <code>idc_group_id</code>, group membership, policy</li>
+<li class="">Lattice resolution issues: check Route 53 profile association and RAM sharing</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-9-cost-optimization-tier-0">Task 9: Cost Optimization (Tier 0)<a href="#task-9-cost-optimization-tier-0" class="hash-link" aria-label="Direct link to Task 9: Cost Optimization (Tier 0)" title="Direct link to Task 9: Cost Optimization (Tier 0)" translate="no">​</a></h2>
+<ul>
+<li class="">ECS Fargate task: CPU <code>256</code>, Memory <code>512</code>, desired count <code>1</code></li>
+<li class="">Lambda: Memory <code>128 MB</code>, Timeout <code>30s</code></li>
+<li class="">Use 2 AZs, avoid NAT gateways when possible, prefer VPC endpoints for S3/ECR</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Tier-0 Settings – to be added" src="/Cloud-Learning-Labs/assets/images/zta-91-tier0-cb50d598ddd3d19a232d90c219f54312.png" width="1860" height="780" class="img_ev3q"></p>
+<p>Estimated monthly cost: ~$25–40 depending on usage.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-10-cleanup">Task 10: Cleanup<a href="#task-10-cleanup" class="hash-link" aria-label="Direct link to Task 10: Cleanup" title="Direct link to Task 10: Cleanup" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-8">Objective<a href="#objective-8" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Destroy all resources including infrastructure, logs, and identity configurations to avoid ongoing charges and ensure a clean slate.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-clean-up-application-artifacts-aggressive">Step 1: Clean up Application Artifacts (Aggressive)<a href="#step-1-clean-up-application-artifacts-aggressive" class="hash-link" aria-label="Direct link to Step 1: Clean up Application Artifacts (Aggressive)" title="Direct link to Step 1: Clean up Application Artifacts (Aggressive)" translate="no">​</a></h3>
+<p>Terraform cannot destroy non-empty ECR repositories. We must force-delete all images, not just <code>latest</code>.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Linux/MB</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Empty Frontend ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecr list-images --repository-name frontend --profile frontend-account --query &#x27;imageIds[*]&#x27; --output json | \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecr batch-delete-image --repository-name frontend --image-ids file:///dev/stdin --profile frontend-account || true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Empty Backend ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecr list-images --repository-name mservice1 --profile backend-account --query &#x27;imageIds[*]&#x27; --output json | \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws ecr batch-delete-image --repository-name mservice1 --image-ids file:///dev/stdin --profile backend-account || true</span><br></span></code></pre></div></div>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Windows (PowerShell)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Empty Frontend ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$images = aws ecr list-images --repository-name frontend --profile frontend-account --query &#x27;imageIds[*]&#x27; --output json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if ($images -ne &quot;[]&quot;) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    $images | Set-Content images.json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    aws ecr batch-delete-image --repository-name frontend --image-ids file://images.json --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    Remove-Item images.json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Empty Backend ECR</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$images = aws ecr list-images --repository-name mservice1 --profile backend-account --query &#x27;imageIds[*]&#x27; --output json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if ($images -ne &quot;[]&quot;) {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    $images | Set-Content images.json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    aws ecr batch-delete-image --repository-name mservice1 --image-ids file://images.json --profile backend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    Remove-Item images.json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Empty Frontend ECR" src="/Cloud-Learning-Labs/assets/images/zta-101-empty-frontend-ecr-d7f1108cc63dccd711544e0f2aa37da9.png" width="1140" height="823" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Empty Backend ECR" src="/Cloud-Learning-Labs/assets/images/zta-101-empty-backend-ecr-7b11001762c99a35368271426143ce7b.png" width="1142" height="790" class="img_ev3q"></p>
+<p><strong>Troubleshooting Failures:</strong>
+If you see <code>failures</code> in the output (e.g., <code>ImageReferencedByManifestList</code>), it means a parent manifest was deleted before its children. <strong>Solution:</strong> Simply <strong>run the command block one more time</strong> to clean up the remaining orphaned images.</p>
+<p><img decoding="async" loading="lazy" alt="Troubleshooting Failures" src="/Cloud-Learning-Labs/assets/images/zta-101-troubleshooting-failures-81208a416784889e55e5abc2f809433b.png" width="1142" height="712" class="img_ev3q"></p>
+<p><strong>Note</strong>: The <code>|| true</code> prevents the script from stopping if the repo is already empty.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-destroy-infrastructure-terraform">Step 2: Destroy Infrastructure (Terraform)<a href="#step-2-destroy-infrastructure-terraform" class="hash-link" aria-label="Direct link to Step 2: Destroy Infrastructure (Terraform)" title="Direct link to Step 2: Destroy Infrastructure (Terraform)" translate="no">​</a></h3>
+<p>Destroy resources in the reverse order of creation (Backend → Frontend → Network).</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># 1. Destroy Backend</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd backend/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&gt; [!TIP]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&gt; **Troubleshooting: &quot;waiting for delete... HealthCheckNotSupported&quot; or &quot;UNAVAILABLE&quot;**</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&gt; If you encounter this error during backend destruction, it is a known timing issue with VPC Lattice Target Groups and ALBs.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">&gt; **Solution:** Simply **run `terraform destroy -auto-approve` again**. The stuck resources will usually be cleaned up on the second attempt.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 2. Destroy Frontend</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../frontend/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy -auto-approve</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># 3. Destroy Network</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd ../network/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy -auto-approve</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Destroy Backend" src="/Cloud-Learning-Labs/assets/images/zta-102-destroy-backend-0f8280859a9d1410d99a29a7e7bbf293.png" width="1120" height="580" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Destroy Frontend" src="/Cloud-Learning-Labs/assets/images/zta-102-destroy-frontend-ec74fb4320f7526d0b1b8642da09d616.png" width="1137" height="515" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Destroy Network" src="/Cloud-Learning-Labs/assets/images/zta-102-destroy-network-a50c6c2f7a44ed0eb3b6b3edbc6e0d01.png" width="1145" height="519" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-clean-up-logs-hidden-costs">Step 3: Clean up Logs (Hidden Costs)<a href="#step-3-clean-up-logs-hidden-costs" class="hash-link" aria-label="Direct link to Step 3: Clean up Logs (Hidden Costs)" title="Direct link to Step 3: Clean up Logs (Hidden Costs)" translate="no">​</a></h3>
+<p>Terraform often leaves CloudWatch Log Groups behind. Delete them manually or via CLI to save storage costs.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Linux/Mac</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Frontend Account Logs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws logs describe-log-groups --query &#x27;logGroups[*].logGroupName&#x27; --output text --profile frontend-account | \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">xargs -I {} aws logs delete-log-group --log-group-name {} --profile frontend-account</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Backend Account Logs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws logs describe-log-groups --query &#x27;logGroups[*].logGroupName&#x27; --output text --profile backend-account | \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">xargs -I {} aws logs delete-log-group --log-group-name {} --profile backend-account</span><br></span></code></pre></div></div>
+<div class="language-powershell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-powershell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Windows (PowerShell)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Frontend Account Logs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$logs = aws logs describe-log-groups --query &#x27;logGroups[*].logGroupName&#x27; --output json --profile frontend-account | ConvertFrom-Json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if ($logs) { $logs | ForEach-Object { aws logs delete-log-group --log-group-name $_ --profile frontend-account } }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Backend Account Logs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">$logs = aws logs describe-log-groups --query &#x27;logGroups[*].logGroupName&#x27; --output json --profile backend-account | ConvertFrom-Json</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">if ($logs) { $logs | ForEach-Object { aws logs delete-log-group --log-group-name $_ --profile backend-account } }</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Clean up Logs" src="/Cloud-Learning-Labs/assets/images/zta-102-clean-up-logs-e05d800e6b2752e2fbaec5e70a0321a6.png" width="1137" height="143" class="img_ev3q"></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-clean-up-identity-center-manual">Step 4: Clean up Identity Center (Manual)<a href="#step-4-clean-up-identity-center-manual" class="hash-link" aria-label="Direct link to Step 4: Clean up Identity Center (Manual)" title="Direct link to Step 4: Clean up Identity Center (Manual)" translate="no">​</a></h3>
+<p>Since Task 1 was done manually, revert it manually in the Management Account (1400) to keep the organization clean.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="remove-account-assignments">Remove Account Assignments:<a href="#remove-account-assignments" class="hash-link" aria-label="Direct link to Remove Account Assignments:" title="Direct link to Remove Account Assignments:" translate="no">​</a></h4>
+<ol>
+<li class="">In IAM Identity Center, go to <strong>AWS accounts</strong> in the left sidebar.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-389f7798aa1546c94c18503d4f226e22.png" width="1873" height="953" class="img_ev3q"></li>
+<li class="">Click on the <strong>name of each account</strong> (e.g., <code>ZT-Network-Account</code>) to open its details.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-2-15af5b135b293d84be37312c7d0b93d3.png" width="1875" height="955" class="img_ev3q"></li>
+<li class="">Under the <strong>Users or groups</strong> tab, check the box next to the assigned users/groups (e.g., <code>ZeroTrust-Admins</code>).
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-3-5db0eea0384a63136aee1075c9fbc505.png" width="1873" height="955" class="img_ev3q"></li>
+<li class="">Click <strong>Remove access</strong> and confirm.</li>
+<li class="">Repeat for the other 2 accounts.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-4-7d889467439b91a9d69adf2abe57c440.png" width="1872" height="960" class="img_ev3q"></li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="delete-permission-sets">Delete Permission Sets:<a href="#delete-permission-sets" class="hash-link" aria-label="Direct link to Delete Permission Sets:" title="Direct link to Delete Permission Sets:" translate="no">​</a></h4>
+<ol>
+<li class="">Go to <strong>Permission sets</strong> &gt; Select <code>ZeroTrust-NetworkAdmin</code>, <code>ZeroTrust-AppDeveloper</code>, etc. &gt; <strong>Delete</strong>.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-5-3f9939dfacbcbaba8c7cce38bed1559f.png" width="1875" height="950" class="img_ev3q"></li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="delete-usersgroups-optional">Delete Users/Groups (Optional):<a href="#delete-usersgroups-optional" class="hash-link" aria-label="Direct link to Delete Users/Groups (Optional):" title="Direct link to Delete Users/Groups (Optional):" translate="no">​</a></h4>
+<ul>
+<li class="">Delete <code>dev1</code> user and groups (<code>ZeroTrust-Admins</code>, <code>ZeroTrust-Developers</code>, <code>ZeroTrust-AppUsers</code>) if no longer needed.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-6-4670c9f2a824c02c3eb41ae8a7de8622.png" width="1873" height="953" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-104-remove-account-assignments-7-230807d640828bbc071e32c86e7ebe05.png" width="1878" height="957" class="img_ev3q"></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-5-handling-member-accounts">Step 5: Handling Member Accounts<a href="#step-5-handling-member-accounts" class="hash-link" aria-label="Direct link to Step 5: Handling Member Accounts" title="Direct link to Step 5: Handling Member Accounts" translate="no">​</a></h3>
+<ol>
+<li class="">Go to <strong>AWS Organizations</strong>.</li>
+<li class="">Select the check box next to the member account name (e.g., <code>ZT-Backend-Account</code>).
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-105-remove-account-assignments-1-38afa771845b426ccb30a8002dc911c0.png" width="1872" height="958" class="img_ev3q"></li>
+<li class="">Choose <strong>Actions</strong> &gt; <strong>Close</strong>.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-105-remove-account-assignments-2-97053a185ca833f5d48ea5a19d669f05.png" width="1875" height="960" class="img_ev3q"></li>
+<li class="">Follow the confirmation steps to close the account.
+<img decoding="async" loading="lazy" alt="Remove Account Assignments" src="/Cloud-Learning-Labs/assets/images/zta-105-remove-account-assignments-3-6c1733a21273b32d2b49e91437cc7697.png" width="1872" height="955" class="img_ev3q"></li>
+</ol>
+<ul>
+<li class=""><em>Note: Closed accounts remain visible for a short time but are suspended immediately and permanently deleted after 90 days.</em></li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-takeaways">Key Takeaways<a href="#key-takeaways" class="hash-link" aria-label="Direct link to Key Takeaways" title="Direct link to Key Takeaways" translate="no">​</a></h2>
+<ul>
+<li class="">Central auth with IAM Identity Center across multi-account</li>
+<li class="">VPN-less access via Verified Access with fine-grained policies</li>
+<li class="">Service-to-service connectivity simplified by VPC Lattice</li>
+<li class="">Terraform-first, repeatable deployment with lab-friendly costs</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="workshop-completion-status">Workshop Completion Status<a href="#workshop-completion-status" class="hash-link" aria-label="Direct link to Workshop Completion Status" title="Direct link to Workshop Completion Status" translate="no">​</a></h2>
+<table><thead><tr><th>Section</th><th>Status</th></tr></thead><tbody><tr><td>Task 1: Identity Center Setup</td><td>Complete</td></tr><tr><td>Task 2: CLI SSO Profiles</td><td>Complete</td></tr><tr><td>Task 3: Repo &amp; Variables</td><td>Complete</td></tr><tr><td>Task 4: Networking Deploy</td><td>Complete</td></tr><tr><td>Task 5: Frontend Deploy + Build</td><td>Complete</td></tr><tr><td>Task 6: Backend Deploy + Build</td><td>Complete</td></tr><tr><td>Task 7: Verified Access Test</td><td>Complete</td></tr><tr><td>Task 8: Monitoring &amp; Troubleshooting</td><td>Complete</td></tr><tr><td>Task 9: Cost Optimization</td><td>Complete</td></tr><tr><td>Task 10: Cleanup</td><td>Complete</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="additional-resources">Additional Resources<a href="#additional-resources" class="hash-link" aria-label="Direct link to Additional Resources" title="Direct link to Additional Resources" translate="no">​</a></h2>
+<ul>
+<li class="">AWS Verified Access: <a href="https://docs.aws.amazon.com/verified-access/" target="_blank" rel="noopener noreferrer" class="">https://docs.aws.amazon.com/verified-access/</a></li>
+<li class="">Amazon VPC Lattice: <a href="https://docs.aws.amazon.com/vpc-lattice/" target="_blank" rel="noopener noreferrer" class="">https://docs.aws.amazon.com/vpc-lattice/</a></li>
+<li class="">AWS Identity Center: <a href="https://docs.aws.amazon.com/singlesignon/" target="_blank" rel="noopener noreferrer" class="">https://docs.aws.amazon.com/singlesignon/</a></li>
+<li class="">AWS Organizations: <a href="https://docs.aws.amazon.com/organizations/" target="_blank" rel="noopener noreferrer" class="">https://docs.aws.amazon.com/organizations/</a></li>
+</ul>
+<hr></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/HoangBaoPhuoc/Cloud-Learning-Labs/tree/main/packages/create-docusaurus/templates/shared/docs/Migrating to Zero Trust Architecture on AWS/README.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Cloud-Learning-Labs/docs/GSP382/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">GSP382</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Terraform CICD and Testing on AWS</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#overview" class="table-of-contents__link toc-highlight">Overview</a></li><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a><ul><li><a href="#aws-resources" class="table-of-contents__link toc-highlight">AWS Resources:</a></li><li><a href="#certificate-setup-self-signed-certificate-lab-only" class="table-of-contents__link toc-highlight">Certificate Setup: Self-Signed Certificate (Lab Only)</a></li><li><a href="#certificate-setup-idvn-domain-free-for-vn-citizens" class="table-of-contents__link toc-highlight">Certificate Setup: .id.vn Domain (Free for VN Citizens)</a></li><li><a href="#local-tools" class="table-of-contents__link toc-highlight">Local Tools:</a></li></ul></li><li><a href="#workshop-scenario" class="table-of-contents__link toc-highlight">Workshop Scenario</a></li><li><a href="#task-1-identity-center-setup-configure-identity-management" class="table-of-contents__link toc-highlight">Task 1: Identity Center Setup (Configure Identity Management)</a><ul><li><a href="#objective" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#prerequisites-1" class="table-of-contents__link toc-highlight">Prerequisites</a></li><li><a href="#step-1-create-groups-user-groups" class="table-of-contents__link toc-highlight">Step 1: Create Groups (User Groups)</a></li><li><a href="#step-2-create-users" class="table-of-contents__link toc-highlight">Step 2: Create Users</a></li><li><a href="#step-3-create-permission-sets" class="table-of-contents__link toc-highlight">Step 3: Create Permission Sets</a></li><li><a href="#step-4-assign-accounts-assign-permissions-to-accounts" class="table-of-contents__link toc-highlight">Step 4: Assign Accounts (Assign Permissions to Accounts)</a></li><li><a href="#step-5-verify-access-crucial" class="table-of-contents__link toc-highlight">Step 5: Verify Access (Crucial)</a></li></ul></li><li><a href="#task-2-configure-aws-cli-with-sso" class="table-of-contents__link toc-highlight">Task 2: Configure AWS CLI with SSO</a><ul><li><a href="#objective-1" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#prerequisites-2" class="table-of-contents__link toc-highlight">Prerequisites</a></li><li><a href="#step-1-configure-network-account-profile" class="table-of-contents__link toc-highlight">Step 1: Configure Network Account Profile</a></li><li><a href="#step-2-configure-frontend-and-backend-profiles" class="table-of-contents__link toc-highlight">Step 2: Configure Frontend and Backend Profiles</a></li><li><a href="#step-3-verify-configuration" class="table-of-contents__link toc-highlight">Step 3: Verify Configuration</a></li><li><a href="#step-4-login-to-activate-sessions" class="table-of-contents__link toc-highlight">Step 4: Login to Activate Sessions</a></li></ul></li><li><a href="#task-3-prepare-repository--variables" class="table-of-contents__link toc-highlight">Task 3: Prepare Repository &amp; Variables</a><ul><li><a href="#objective-2" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-4-deploy-networking-account" class="table-of-contents__link toc-highlight">Task 4: Deploy Networking Account</a><ul><li><a href="#objective-3" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps-1" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-5-deploy-frontend-account--build-app" class="table-of-contents__link toc-highlight">Task 5: Deploy Frontend Account + Build App</a><ul><li><a href="#objective-4" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps-2" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-6-deploy-backend-account--build-services" class="table-of-contents__link toc-highlight">Task 6: Deploy Backend Account + Build Services</a><ul><li><a href="#objective-5" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps-3" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-7-verified-access-test" class="table-of-contents__link toc-highlight">Task 7: Verified Access Test</a><ul><li><a href="#objective-6" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps-4" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-8-monitoring--troubleshooting" class="table-of-contents__link toc-highlight">Task 8: Monitoring &amp; Troubleshooting</a><ul><li><a href="#objective-7" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps-5" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-9-cost-optimization-tier-0" class="table-of-contents__link toc-highlight">Task 9: Cost Optimization (Tier 0)</a></li><li><a href="#task-10-cleanup" class="table-of-contents__link toc-highlight">Task 10: Cleanup</a><ul><li><a href="#objective-8" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#step-1-clean-up-application-artifacts-aggressive" class="table-of-contents__link toc-highlight">Step 1: Clean up Application Artifacts (Aggressive)</a></li><li><a href="#step-2-destroy-infrastructure-terraform" class="table-of-contents__link toc-highlight">Step 2: Destroy Infrastructure (Terraform)</a></li><li><a href="#step-3-clean-up-logs-hidden-costs" class="table-of-contents__link toc-highlight">Step 3: Clean up Logs (Hidden Costs)</a></li><li><a href="#step-4-clean-up-identity-center-manual" class="table-of-contents__link toc-highlight">Step 4: Clean up Identity Center (Manual)</a></li><li><a href="#step-5-handling-member-accounts" class="table-of-contents__link toc-highlight">Step 5: Handling Member Accounts</a></li></ul></li><li><a href="#key-takeaways" class="table-of-contents__link toc-highlight">Key Takeaways</a></li><li><a href="#workshop-completion-status" class="table-of-contents__link toc-highlight">Workshop Completion Status</a></li><li><a href="#additional-resources" class="table-of-contents__link toc-highlight">Additional Resources</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with ❤️ at AWS. <br> Copyright © 2026 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>

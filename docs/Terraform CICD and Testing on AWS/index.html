@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Terraform CICD and Testing on AWS/README" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS | AWS EKS Workshop</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/img/aws-logo.png"><meta data-rh="true" name="twitter:image" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/img/aws-logo.png"><meta data-rh="true" property="og:url" content="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS | AWS EKS Workshop"><meta data-rh="true" name="description" content="Focus: Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing"><meta data-rh="true" property="og:description" content="Focus: Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing"><link data-rh="true" rel="icon" href="/Cloud-Learning-Labs/img/aws-logo.ico"><link data-rh="true" rel="canonical" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"><link data-rh="true" rel="alternate" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/" hreflang="en"><link data-rh="true" rel="alternate" href="https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Terraform CICD and Testing on AWS","item":"https://HoangBaoPhuoc.github.io/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"}]}</script><link rel="alternate" type="application/rss+xml" href="/Cloud-Learning-Labs/blog/rss.xml" title="AWS EKS Workshop RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/Cloud-Learning-Labs/blog/atom.xml" title="AWS EKS Workshop Atom Feed"><link rel="stylesheet" href="/Cloud-Learning-Labs/assets/css/styles.b7e2af40.css">
+<script src="/Cloud-Learning-Labs/assets/js/runtime~main.ab821c61.js" defer="defer"></script>
+<script src="/Cloud-Learning-Labs/assets/js/main.4f94325e.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/Cloud-Learning-Labs/img/aws-logo.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Cloud-Learning-Labs/"><div class="navbar__logo"><img src="/Cloud-Learning-Labs/img/aws-logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/Cloud-Learning-Labs/img/aws-logo.svg" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">AWS EKS Workshop</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Cloud-Learning-Labs/docs/intro">Modules</a><a class="navbar__item navbar__link" href="/Cloud-Learning-Labs/contributor">Contributors</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/HoangBaoPhuoc/Cloud-Learning-Labs" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cloud-Learning-Labs/docs/intro"><span title="Introduction" class="linkLabel_WmDU">Introduction</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item hidden"><a class="menu__link" href="/Cloud-Learning-Labs/docs/GSP382/"><span title="GSP382" class="linkLabel_WmDU">GSP382</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"><span title="Migrating to Zero Trust Architecture" class="linkLabel_WmDU">Migrating to Zero Trust Architecture</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Cloud-Learning-Labs/docs/Terraform CICD and Testing on AWS/"><span title="Terraform CICD and Testing on AWS" class="linkLabel_WmDU">Terraform CICD and Testing on AWS</span></a></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/Cloud-Learning-Labs/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Terraform CICD and Testing on AWS</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Hands-On: Implementing Terraform CI/CD Pipelines and Security Testing on AWS</h1></header>
+<p><strong>Focus:</strong> Infrastructure as Code, CI/CD Automation, Security Scanning, and Testing
+<strong>Duration:</strong> 5 hours<br>
+<strong>Level:</strong> Intermediate<br>
+<strong>Status:</strong> Completed<br>
+<strong>Author:</strong> HoangBaoPhuoc (phuochb)<br>
+<strong>Co-author:</strong> PNg-HA (Anh Pham)</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview">Overview<a href="#overview" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h2>
+<p>This workshop demonstrates the implementation of a robust CI/CD pipeline for Terraform on AWS. The objective is to transition from manual infrastructure management to a fully automated, tested, and secure deployment workflow using AWS native tools and third-party security scanners.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="prerequisites">Prerequisites<a href="#prerequisites" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h2>
+<ul>
+<li class="">AWS account with administrator or sandbox permissions</li>
+<li class="">AWS CLI configured on your workstation (or equivalent cloud IDE)</li>
+<li class="">Git installed</li>
+<li class="">Terraform and tfenv installed</li>
+<li class="">Optional: Docker installed if you plan to run containerized tests locally</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="workshop-scenario">Workshop Scenario<a href="#workshop-scenario" class="hash-link" aria-label="Direct link to Workshop Scenario" title="Direct link to Workshop Scenario" translate="no">​</a></h2>
+<p>As a Cloud Security Engineer, you are tasked with automating the deployment of AWS infrastructure for an enterprise environment. The solution ensures that all Terraform modules are validated for syntax, tested for logic using the Terraform Test Framework, and scanned for security vulnerabilities using Checkov before being deployed via AWS CodePipeline.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-1-environment-setup-and-ide-configuration">Task 1: Environment Setup and IDE Configuration<a href="#task-1-environment-setup-and-ide-configuration" class="hash-link" aria-label="Direct link to Task 1: Environment Setup and IDE Configuration" title="Direct link to Task 1: Environment Setup and IDE Configuration" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective">Objective<a href="#objective" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Prepare the development environment by configuring the Integrated Development Environment (IDE) and ensuring necessary CLI tools are installed.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="steps">Steps<a href="#steps" class="hash-link" aria-label="Direct link to Steps" title="Direct link to Steps" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-aws-account--region-selection">1.1 AWS Account &amp; Region Selection<a href="#11-aws-account--region-selection" class="hash-link" aria-label="Direct link to 1.1 AWS Account &amp; Region Selection" title="Direct link to 1.1 AWS Account &amp; Region Selection" translate="no">​</a></h4>
+<p>Ensure programmatic administrator access is available. Recommended regions include <code>us-east-1</code>, <code>us-east-2</code>, or <code>us-west-2</code>.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-cloudformation-stack-creation">1.2 CloudFormation Stack Creation<a href="#12-cloudformation-stack-creation" class="hash-link" aria-label="Direct link to 1.2 CloudFormation Stack Creation" title="Direct link to 1.2 CloudFormation Stack Creation" translate="no">​</a></h4>
+<blockquote>
+<p>Note: If you are running this lab locally or in your own IDE, you can skip the CloudFormation Code Editor setup and work directly in this repository.</p>
+</blockquote>
+<ol>
+<li class="">
+<p>On the Create stack page, in the <strong>Prerequisite - Prepare template</strong> section, select <strong>Build from Infrastructure Composer</strong> then <strong>Create a template in Infrastructure Composer</strong>.
+<img decoding="async" loading="lazy" alt="AWS CloudFormation - Stack Parameters Configuration for Workshop Environment" src="/Cloud-Learning-Labs/assets/images/1.1-bf40a5096b5e142ddc89e71559c8d2c3.png" width="1747" height="891" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Use the provided <code>custom-code-editor.yaml</code> template to provision a Code Editor environment on Amazon EC2.
+<img decoding="async" loading="lazy" alt="Confirm creating S3 progress" src="/Cloud-Learning-Labs/assets/images/1.2-9656d9dfa276fa06f12ffd0990a2a27f.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Successfully import .yaml" src="/Cloud-Learning-Labs/assets/images/1.3-ba68b1709ec88ba7ef349394d7f6742e.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Rename stack" src="/Cloud-Learning-Labs/assets/images/1.4-f0067161985f44bc0008ac8e65175d19.png" width="1855" height="956" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Select to acknowledge create IAM resource" src="/Cloud-Learning-Labs/assets/images/1.5-1888e02be690e6021e0ee8d49aa08c7b.png" width="1857" height="953" class="img_ev3q">
+Submit successfully!
+<img decoding="async" loading="lazy" alt="Overview stack created" src="/Cloud-Learning-Labs/assets/images/{59E12DA4-7ED5-4022-B5D0-80C9599A9D8A}-860b830a7a91b5f7f1b20a3a8e3a7550.png" width="1868" height="961" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Overview stack output" src="/Cloud-Learning-Labs/assets/images/Screenshot_14-1-2026_214646_ap-southeast-2.console.aws.amazon.com-49e91a2707b5d189ad19dab25ae0d934.jpeg" width="1747" height="894" class="img_ev3q"></p>
+</li>
+<li class="">
+<p>Once the stack is created, select the <strong>Outputs</strong> tab to view the relevant values we will use in the next part of the workshop. In the Outputs tab, note the <strong>Password</strong> and <strong>URL</strong> values.</p>
+</li>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-docker-installation-on-ubuntu-2204">1.3 Docker Installation on Ubuntu 22.04<a href="#13-docker-installation-on-ubuntu-2204" class="hash-link" aria-label="Direct link to 1.3 Docker Installation on Ubuntu 22.04" title="Direct link to 1.3 Docker Installation on Ubuntu 22.04" translate="no">​</a></h4>
+<p>Configure Docker on the EC2 instance:</p>
+<ul>
+<li class=""><strong>Package Manager:</strong> Used <code>apt</code> instead of <code>yum</code> due to Ubuntu-based environment</li>
+<li class=""><strong>Service Management:</strong> Enabled and started <code>docker.service</code> using <code>systemctl</code></li>
+<li class=""><strong>Permissions:</strong> Added current user to the <code>docker</code> group to enable non-root execution, as required by the workshop</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-verify-tooling">1.4 Verify Tooling<a href="#14-verify-tooling" class="hash-link" aria-label="Direct link to 1.4 Verify Tooling" title="Direct link to 1.4 Verify Tooling" translate="no">​</a></h4>
+<p>Ensure the following are installed and accessible via terminal:</p>
+<ul>
+<li class=""><code>aws-cli</code> (v2)</li>
+<li class=""><code>terraform</code> &amp; <code>tfenv</code></li>
+<li class=""><code>checkov</code></li>
+<li class=""><code>jq</code>, <code>git</code>, and <code>docker</code></li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Verify tool" src="/Cloud-Learning-Labs/assets/images/1.6-99d8d69b3e6b03796d98ece46d28bbb2.png" width="1473" height="716" class="img_ev3q"></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="15-ide-extensions">1.5 IDE Extensions<a href="#15-ide-extensions" class="hash-link" aria-label="Direct link to 1.5 IDE Extensions" title="Direct link to 1.5 IDE Extensions" translate="no">​</a></h4>
+<p>Install the <strong>HashiCorp Terraform</strong> and <strong>Amazon Q</strong> extensions for Visual Studio Code to enhance development efficiency.</p>
+<p><img decoding="async" loading="lazy" alt="HashiCorp installed" src="/Cloud-Learning-Labs/assets/images/image-1-3e250804af2ca1e0c9603520667d4aa4.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Amazon Q installed" src="/Cloud-Learning-Labs/assets/images/image-aa5b94f184e3017289a9b205bba40f59.png" width="1747" height="891" class="img_ev3q"></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="16-configure-ide-and-clone-repository">1.6 Configure IDE and Clone Repository<a href="#16-configure-ide-and-clone-repository" class="hash-link" aria-label="Direct link to 1.6 Configure IDE and Clone Repository" title="Direct link to 1.6 Configure IDE and Clone Repository" translate="no">​</a></h4>
+<p>Verify all resources are properly configured and successfully clone the workshop repository.</p>
+<p><img decoding="async" loading="lazy" alt="Verify successfully all resources" src="/Cloud-Learning-Labs/assets/images/image-2-fe937b8342e0cca020d6169164a11bb4.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-2-local-terraform-module-development-and-testing">Task 2: Local Terraform Module Development and Testing<a href="#task-2-local-terraform-module-development-and-testing" class="hash-link" aria-label="Direct link to Task 2: Local Terraform Module Development and Testing" title="Direct link to Task 2: Local Terraform Module Development and Testing" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-1">Objective<a href="#objective-1" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Develop a standardized Terraform module and perform localized testing to identify issues before committing code to the repository.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sub-task-21-create-terraform-module">Sub-task 2.1: Create Terraform Module<a href="#sub-task-21-create-terraform-module" class="hash-link" aria-label="Direct link to Sub-task 2.1: Create Terraform Module" title="Direct link to Sub-task 2.1: Create Terraform Module" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview-1">Overview<a href="#overview-1" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h4>
+<p>Create a well-structured Terraform module following best practices for organization and reusability in the workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd/ directory.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="module-structure">Module Structure<a href="#module-structure" class="hash-link" aria-label="Direct link to Module Structure" title="Direct link to Module Structure" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p><strong>Provider Configuration (<code>providers.tf</code>):</strong></p>
+<ul>
+<li class="">Define the AWS provider with the appropriate region</li>
+<li class="">Configure provider version constraints</li>
+<li class="">Set up any required provider features</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Resource Blocks (<code>main.tf</code>):</strong></p>
+<ul>
+<li class="">Define core AWS resources (e.g., VPC, subnets, security groups, EC2 instances)</li>
+<li class="">Implement proper resource dependencies</li>
+<li class="">Use consistent naming conventions and tagging</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Variable Definitions (<code>variables.tf</code>):</strong></p>
+<ul>
+<li class="">Declare input variables for parameterization</li>
+<li class="">Include descriptions and type constraints</li>
+<li class="">Set default values where appropriate</li>
+<li class="">Add validation rules for critical variables</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Output Configuration (<code>outputs.tf</code>):</strong></p>
+<ul>
+<li class="">Export important resource attributes</li>
+<li class="">Provide values for use by other modules</li>
+<li class="">Include descriptions for each output</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Variable Values (<code>terraform.tfvars</code>):</strong></p>
+<ul>
+<li class="">Specify concrete values for variables</li>
+<li class="">Environment-specific configurations</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sub-task-22-terraform-test-framework">Sub-task 2.2: Terraform Test Framework<a href="#sub-task-22-terraform-test-framework" class="hash-link" aria-label="Direct link to Sub-task 2.2: Terraform Test Framework" title="Direct link to Sub-task 2.2: Terraform Test Framework" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview-2">Overview<a href="#overview-2" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h4>
+<p>Use the native Terraform Test Framework to validate module behavior without deploying actual infrastructure.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="test-implementation">Test Implementation<a href="#test-implementation" class="hash-link" aria-label="Direct link to Test Implementation" title="Direct link to Test Implementation" translate="no">​</a></h4>
+<ol>
+<li class="">
+<p><strong>Create Test Files:</strong></p>
+<ul>
+<li class="">Author <code>.tftest.hcl</code> files in the <code>tests/</code> directory</li>
+<li class="">Define multiple test scenarios for different use cases</li>
+<li class="">Test both success and failure conditions</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Test Structure:</strong></p>
+<ul>
+<li class=""><strong>Run blocks:</strong> Define test scenarios with specific configurations</li>
+<li class=""><strong>Assert blocks:</strong> Validate resource attributes and outputs</li>
+<li class=""><strong>Mock providers:</strong> Test without creating real resources (where applicable)</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Execute Tests:</strong></p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"> cd terraform-config/modules/module-aws-tf-cicd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> terraform test</span><br></span></code></pre></div></div>
+</li>
+<li class="">
+<p><strong>Validate Results:</strong></p>
+<ul>
+<li class="">Review test output for passes and failures</li>
+<li class="">Ensure all assertions succeed</li>
+<li class="">Check for unexpected behaviors or edge cases</li>
+</ul>
+</li>
+</ol>
+<p><strong>Benefits:</strong></p>
+<ul>
+<li class="">Catch configuration errors early in development</li>
+<li class="">Validate module behavior across different input scenarios</li>
+<li class="">Ensure consistency and compliance with organizational standards</li>
+<li class="">Reduce deployment failures in CI/CD pipelines</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Successful terraform test results" src="/Cloud-Learning-Labs/assets/images/image-4-1699957fd1c7c76c01d8d5b87c7f13a3.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="sub-task-23-security-scanning-with-checkov">Sub-task 2.3: Security Scanning with Checkov<a href="#sub-task-23-security-scanning-with-checkov" class="hash-link" aria-label="Direct link to Sub-task 2.3: Security Scanning with Checkov" title="Direct link to Sub-task 2.3: Security Scanning with Checkov" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="overview-3">Overview<a href="#overview-3" class="hash-link" aria-label="Direct link to Overview" title="Direct link to Overview" translate="no">​</a></h4>
+<p>Perform static security analysis to identify misconfigurations and compliance violations before code reaches production.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="checkov-implementation">Checkov Implementation<a href="#checkov-implementation" class="hash-link" aria-label="Direct link to Checkov Implementation" title="Direct link to Checkov Implementation" translate="no">​</a></h4>
+<ol>
+<li class=""><strong>Run Security Scan:</strong>
+Run checkov --directory /path-to-your-module-directory replacing /path-to-your-module-directory with the output in the terminal after you ran the pwd command.</li>
+</ol>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">    pwd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    checkov --directory workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/modules/module-aws-tf-cicd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    # Alternatively, you can just run checkov -d . to run it against all files in the current directory.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    checkov -d . --compact</span><br></span></code></pre></div></div>
+<ol start="2">
+<li class="">
+<p><strong>Review Scan Results:</strong>
+Analyze findings for common security issues:</p>
+<ul>
+<li class=""><strong>Storage Security:</strong>
+<ul>
+<li class="">Unencrypted S3 buckets</li>
+<li class="">Missing S3 bucket versioning</li>
+<li class="">Unencrypted EBS volumes</li>
+</ul>
+</li>
+<li class=""><strong>Network Security:</strong>
+<ul>
+<li class="">Overly permissive security group rules (0.0.0.0/0)</li>
+<li class="">Missing network ACL restrictions</li>
+<li class="">Public subnet configurations</li>
+</ul>
+</li>
+<li class=""><strong>Access Control:</strong>
+<ul>
+<li class="">Overly broad IAM policies</li>
+<li class="">Missing MFA requirements</li>
+<li class="">Public access to sensitive resources</li>
+</ul>
+</li>
+<li class=""><strong>Compliance:</strong>
+<ul>
+<li class="">Missing encryption at rest</li>
+<li class="">Unencrypted data in transit</li>
+<li class="">Missing logging and monitoring</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Remediate Issues:</strong></p>
+<ul>
+<li class="">Fix critical and high-severity findings immediately</li>
+<li class="">Document accepted risks for low-severity findings</li>
+<li class="">Update Terraform code to align with security best practices</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Verify Compliance:</strong></p>
+<ul>
+<li class="">Re-run Checkov to confirm all critical issues are resolved</li>
+<li class="">Generate compliance report for audit purposes</li>
+</ul>
+</li>
+</ol>
+<p><strong>Checkov Benefits:</strong></p>
+<ul>
+<li class="">Shift-left security approach</li>
+<li class="">Automated compliance validation against industry standards (CIS, PCI-DSS, HIPAA)</li>
+<li class="">Integration with CI/CD pipelines</li>
+<li class="">Support for multiple IaC frameworks (Terraform, CloudFormation, Kubernetes)</li>
+<li class="">Customizable policies for organizational requirements</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Checkov scan output showing passed/failed checks" src="/Cloud-Learning-Labs/assets/images/image-5-8a760de32ccb302a111f99dd82740c43.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/imageb-769e9bf5e7ce19cef8e0ef1b79f6eb1e.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-1b-35ad28fddf815595270d3817cf64454f.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-2b-53fd22a6990bc3fb5eb96a354ab58b0d.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-3b-943d8e95f850796c637baf071fdebdaf.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-4b-a88be5a3cdd5795b2f37d2b0748d32a3.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-5b-86fcee25a08e557507f8228f7fa05ec2.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-6b-e1fdfb503f31ac8fb2eba9e2fae116ba.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-7b-5e9776b92e53b96b3cbbed107c38e815.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-8b-93ca14db002d136e8d7dab1c31fcc5a1.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-9b-c16de3f4b1ddf04c97b1447881079405.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="alt text" src="/Cloud-Learning-Labs/assets/images/image-10b-7fdfd88a152fa9a8bb84f3862dd49556.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-3-cicd-pipeline-implementation">Task 3: CI/CD Pipeline Implementation<a href="#task-3-cicd-pipeline-implementation" class="hash-link" aria-label="Direct link to Task 3: CI/CD Pipeline Implementation" title="Direct link to Task 3: CI/CD Pipeline Implementation" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-2">Objective<a href="#objective-2" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Automate the deployment process by establishing a remote backend and implementing a multi-stage CI/CD pipeline using AWS native services.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="31-pipeline-architecture">3.1 Pipeline Architecture<a href="#31-pipeline-architecture" class="hash-link" aria-label="Direct link to 3.1 Pipeline Architecture" title="Direct link to 3.1 Pipeline Architecture" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="terraform-module-validation-pipeline">Terraform Module Validation Pipeline<a href="#terraform-module-validation-pipeline" class="hash-link" aria-label="Direct link to Terraform Module Validation Pipeline" title="Direct link to Terraform Module Validation Pipeline" translate="no">​</a></h4>
+<ul>
+<li class=""><strong>Source:</strong> <code>module-aws-tf-cicd</code> S3 bucket</li>
+<li class=""><strong>Purpose:</strong> Validates module functionality and security</li>
+<li class=""><strong>Stages:</strong> Pull Code → Terraform Test → Checkov Scan</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="terraform-deployment-pipeline">Terraform Deployment Pipeline<a href="#terraform-deployment-pipeline" class="hash-link" aria-label="Direct link to Terraform Deployment Pipeline" title="Direct link to Terraform Deployment Pipeline" translate="no">​</a></h4>
+<ul>
+<li class=""><strong>Source:</strong> <code>example-production-workload</code> S3 bucket</li>
+<li class=""><strong>Purpose:</strong> Validates and deploys production infrastructure</li>
+<li class=""><strong>Stages:</strong> Pull Code → Terraform Test → Checkov Scan → Terraform Apply</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="32-resources-overview">3.2 Resources Overview<a href="#32-resources-overview" class="hash-link" aria-label="Direct link to 3.2 Resources Overview" title="Direct link to 3.2 Resources Overview" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="pipelines--build-projects">Pipelines &amp; Build Projects<a href="#pipelines--build-projects" class="hash-link" aria-label="Direct link to Pipelines &amp; Build Projects" title="Direct link to Pipelines &amp; Build Projects" translate="no">​</a></h4>
+<ul>
+<li class=""><strong>Pipelines:</strong> <code>tf-module-validation-pipeline</code>, <code>tf-deployment-pipeline</code></li>
+<li class=""><strong>Build Projects:</strong> TerraformTest and Checkov projects for each component</li>
+<li class=""><strong>S3 Buckets:</strong> Git repos (<code>module-aws-tf-cicd</code>, <code>aws-devops-core</code>, <code>example-production-workload</code>) and state buckets</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="33-understanding-git-remote-s3">3.3 Understanding Git-Remote-S3<a href="#33-understanding-git-remote-s3" class="hash-link" aria-label="Direct link to 3.3 Understanding Git-Remote-S3" title="Direct link to 3.3 Understanding Git-Remote-S3" translate="no">​</a></h3>
+<p>This workshop uses <strong>git-remote-s3</strong> to simulate repositories without external providers.</p>
+<p><strong>Key Features:</strong></p>
+<ul>
+<li class="">Protocol: <code>s3+zip://</code> instead of <code>https://</code></li>
+<li class="">Trigger: S3 source action in CodePipeline</li>
+<li class="">EventBridge detects S3 changes and triggers pipeline</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="34-deploy-infrastructure">3.4 Deploy Infrastructure<a href="#34-deploy-infrastructure" class="hash-link" aria-label="Direct link to 3.4 Deploy Infrastructure" title="Direct link to 3.4 Deploy Infrastructure" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-directory">Step 1: Navigate to Directory<a href="#step-1-navigate-to-directory" class="hash-link" aria-label="Direct link to Step 1: Navigate to Directory" title="Direct link to Step 1: Navigate to Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-create-configuration-files">Step 2: Create Configuration Files<a href="#step-2-create-configuration-files" class="hash-link" aria-label="Direct link to Step 2: Create Configuration Files" title="Direct link to Step 2: Create Configuration Files" translate="no">​</a></h4>
+<p>Create the following files with provided configurations:</p>
+<p><strong>provider.tf</strong> - AWS provider and backend (commented for now)</p>
+<p><strong>locals.tf</strong> - Centralized naming and configuration values</p>
+<p><strong>variables.tf</strong> - Input variables with defaults</p>
+<p><strong>ecr.tf</strong> - ECR repository for Checkov image (avoids DockerHub throttling)</p>
+<p><strong>outputs.tf</strong> - Exports S3 state bucket names for reference</p>
+<p><strong>main.tf</strong> - Uses the module created earlier to deploy all resources</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-verify-and-deploy-resources">Step 3: Verify and Deploy Resources<a href="#step-3-verify-and-deploy-resources" class="hash-link" aria-label="Direct link to Step 3: Verify and Deploy Resources" title="Direct link to Step 3: Verify and Deploy Resources" translate="no">​</a></h4>
+<p>After verify docker, deploy the following terraform resources</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span></code></pre></div></div>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-save-outputs">Step 4: Save Outputs<a href="#step-4-save-outputs" class="hash-link" aria-label="Direct link to Step 4: Save Outputs" title="Direct link to Step 4: Save Outputs" translate="no">​</a></h4>
+<p><strong>Important:</strong> Copy these values (&quot;aws_devops_core&quot; = &quot;aws-devops-core-XXXX&quot;) - you&#x27;ll need them later!</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Apply complete! Resources: 63 added, 0 changed, 0 destroyed.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Outputs:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">aws_devops_core_s3_bucket_name = &quot;aws-devops-core-tf-state-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">example_production_workload_s3_bucket_name = &quot;example-prod-workload-tf-state-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git_remote_s3_bucket_names = tomap({</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;aws_devops_core&quot; = &quot;aws-devops-core-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;example_production_workload&quot; = &quot;example-prod-workload-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  &quot;module_aws_tf_cicd&quot; = &quot;module-aws-tf-cicd-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">})</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform apply success with outputs" src="/Cloud-Learning-Labs/assets/images/image-8-3a59cb84ab565f110557482448c208e0.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-6-check-codepipeline-expected-error">Step 6: Check CodePipeline (Expected Error)<a href="#step-6-check-codepipeline-expected-error" class="hash-link" aria-label="Direct link to Step 6: Check CodePipeline (Expected Error)" title="Direct link to Step 6: Check CodePipeline (Expected Error)" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline. You&#x27;ll see pipelines with failed status.</p>
+<p><img decoding="async" loading="lazy" alt="Codepipeline console search" src="/Cloud-Learning-Labs/assets/images/image-9-9d2baaf212aa04677df04198cedb9f50.png" width="1747" height="891" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Codepipeline dashboard pipeline error" src="/Cloud-Learning-Labs/assets/images/image-10-1bd838186bb6ab22b197294f90a64fd8.png" width="1747" height="891" class="img_ev3q"></p>
+<p>Click on a pipeline to see details. The <code>PullFromS3</code> action failed because buckets are empty (no <code>main</code> branch yet).</p>
+<p><img decoding="async" loading="lazy" alt="Codepipeline s3 error" src="/Cloud-Learning-Labs/assets/images/image-11-9d57771844a59ababf986745730cf9ea.png" width="1747" height="891" class="img_ev3q"></p>
+<p><strong>This error is expected!</strong> Pipelines will succeed once we push code to the repositories.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="35-configure-s3-remote-backend">3.5 Configure S3 Remote Backend<a href="#35-configure-s3-remote-backend" class="hash-link" aria-label="Direct link to 3.5 Configure S3 Remote Backend" title="Direct link to 3.5 Configure S3 Remote Backend" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="why-remote-state">Why Remote State?<a href="#why-remote-state" class="hash-link" aria-label="Direct link to Why Remote State?" title="Direct link to Why Remote State?" translate="no">​</a></h4>
+<p>Local state files prevent collaboration. Remote backends (S3) enable:</p>
+<ul>
+<li class="">Centralized state storage</li>
+<li class="">Team collaboration</li>
+<li class="">State locking (prevents concurrent modifications)</li>
+<li class="">Version control with S3 versioning</li>
+</ul>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-edit-providertf">Step 1: Edit provider.tf<a href="#step-1-edit-providertf" class="hash-link" aria-label="Direct link to Step 1: Edit provider.tf" title="Direct link to Step 1: Edit provider.tf" translate="no">​</a></h4>
+<p>Uncomment the backend block (press <code>CMD + /</code> on Mac or <code>CTRL + /</code> on Windows):</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">backend &quot;s3&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  bucket         = &quot;add-your-bucket-name-here&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  key            = &quot;state/terraform.tfstate&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region         = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  encrypt        = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  use_lockfile   = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-update-bucket-name">Step 2: Update Bucket Name<a href="#step-2-update-bucket-name" class="hash-link" aria-label="Direct link to Step 2: Update Bucket Name" title="Direct link to Step 2: Update Bucket Name" translate="no">​</a></h4>
+<p>Replace <code>&quot;add-your-bucket-name-here&quot;</code> with your <code>aws_devops_core_s3_bucket_name</code> from outputs.</p>
+<p><strong>Example:</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">backend &quot;s3&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  bucket         = &quot;aws-devops-core-tf-state-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  key            = &quot;state/terraform.tfstate&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region         = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  encrypt        = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  use_lockfile   = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>Note on State Locking:</strong> The <code>use_lockfile</code> argument enables state locking using S3 conditional writes (new in Terraform 1.10+). Previously required DynamoDB.</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-migrate-state">Step 3: Migrate State<a href="#step-3-migrate-state" class="hash-link" aria-label="Direct link to Step 3: Migrate State" title="Direct link to Step 3: Migrate State" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init</span><br></span></code></pre></div></div>
+<p>When prompted to copy existing state, type <code>yes</code>:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Do you want to copy existing state to the new backend?</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Enter a value: yes</span><br></span></code></pre></div></div>
+<p>You should see:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Successfully configured the backend &quot;s3&quot;!</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform init migration success" src="/Cloud-Learning-Labs/assets/images/image-12-f5fddf1ffe42f34b9368b52c7e96911f.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-verify-in-s3">Step 4: Verify in S3<a href="#step-4-verify-in-s3" class="hash-link" aria-label="Direct link to Step 4: Verify in S3" title="Direct link to Step 4: Verify in S3" translate="no">​</a></h4>
+<p>Navigate to S3 Console → Select bucket starting with <code>aws-devops-core-tf-state</code>.</p>
+<p>You should see: <code>state/</code> folder containing <code>terraform.tfstate</code> file.</p>
+<p><img decoding="async" loading="lazy" alt="State folder created" src="/Cloud-Learning-Labs/assets/images/image-13-88bb7b46c6fbd292a81d32d9885940de.png" width="1747" height="891" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="State file moved to s3" src="/Cloud-Learning-Labs/assets/images/image-14-0666801563454e01c15a76c17e65353d.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="36-trigger-module-validation-pipeline">3.6 Trigger Module Validation Pipeline<a href="#36-trigger-module-validation-pipeline" class="hash-link" aria-label="Direct link to 3.6 Trigger Module Validation Pipeline" title="Direct link to 3.6 Trigger Module Validation Pipeline" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-module-directory">Step 1: Navigate to Module Directory<a href="#step-1-navigate-to-module-directory" class="hash-link" aria-label="Direct link to Step 1: Navigate to Module Directory" title="Direct link to Step 1: Navigate to Module Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd ../modules/module-aws-tf-cicd</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-initialize-git-repository">Step 2: Initialize Git Repository<a href="#step-2-initialize-git-repository" class="hash-link" aria-label="Direct link to Step 2: Initialize Git Repository" title="Direct link to Step 2: Initialize Git Repository" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git branch -M main</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-configure-git-remote">Step 3: Configure Git Remote<a href="#step-3-configure-git-remote" class="hash-link" aria-label="Direct link to Step 3: Configure Git Remote" title="Direct link to Step 3: Configure Git Remote" translate="no">​</a></h4>
+<p>Get your S3 bucket name from outputs:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># View all outputs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform -chdir=../../aws-devops-core output</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Or get specific bucket name</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform -chdir=../../aws-devops-core output -json git_remote_s3_bucket_names | jq -r &#x27;.&quot;module_aws_tf_cicd&quot;&#x27;</span><br></span></code></pre></div></div>
+<p>Add remote (replace <code>your-s3-bucket-name</code> with your actual bucket name):</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git remote add origin s3+zip://your-s3-bucket-name/s3-repo</span><br></span></code></pre></div></div>
+<p><strong>Important:</strong> Include <code>/s3-repo</code> suffix - EventBridge looks for this pattern!</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-verify-remote">Step 4: Verify Remote<a href="#step-4-verify-remote" class="hash-link" aria-label="Direct link to Step 4: Verify Remote" title="Direct link to Step 4: Verify Remote" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git remote -v</span><br></span></code></pre></div></div>
+<p>Expected output:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">origin  s3+zip://module-aws-tf-cicd-XXXX/s3-repo (fetch)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">origin  s3+zip://module-aws-tf-cicd-XXXX/s3-repo (push)</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-5-push-code">Step 5: Push Code<a href="#step-5-push-code" class="hash-link" aria-label="Direct link to Step 5: Push Code" title="Direct link to Step 5: Push Code" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git add .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m &quot;Initial commit&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push origin -u main</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-6-monitor-pipeline-execution">Step 6: Monitor Pipeline Execution<a href="#step-6-monitor-pipeline-execution" class="hash-link" aria-label="Direct link to Step 6: Monitor Pipeline Execution" title="Direct link to Step 6: Monitor Pipeline Execution" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline.</p>
+<p>The <code>tf-module-validation-module-aws-tf-cicd</code> pipeline status should be <strong>In progress</strong>.</p>
+<p><img decoding="async" loading="lazy" alt="Codepipeline run in progress" src="/Cloud-Learning-Labs/assets/images/image-15-12103ff666d528ff1321e7037536273d.png" width="1747" height="891" class="img_ev3q"></p>
+<p>After a few minutes, the pipeline should complete successfully.</p>
+<p><img decoding="async" loading="lazy" alt="Codepipeline run successful" src="/Cloud-Learning-Labs/assets/images/image-16-be743e36f92db01123204996e3d4e962.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Codepipeline run successful overview pipeline" src="/Cloud-Learning-Labs/assets/images/image-17-c8407be7102067f3f003a5f646e4dfe8.png" width="1747" height="891" class="img_ev3q"></p>
+<p>Click on the pipeline name to view detailed logs for each stage.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="37-trigger-deployment-pipeline">3.7 Trigger Deployment Pipeline<a href="#37-trigger-deployment-pipeline" class="hash-link" aria-label="Direct link to 3.7 Trigger Deployment Pipeline" title="Direct link to 3.7 Trigger Deployment Pipeline" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-production-workload-directory">Step 1: Navigate to Production Workload Directory<a href="#step-1-navigate-to-production-workload-directory" class="hash-link" aria-label="Direct link to Step 1: Navigate to Production Workload Directory" title="Direct link to Step 1: Navigate to Production Workload Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd ../../example-production-workload</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-create-and-configure-providertf">Step 2: Create and Configure provider.tf<a href="#step-2-create-and-configure-providertf" class="hash-link" aria-label="Direct link to Step 2: Create and Configure provider.tf" title="Direct link to Step 2: Create and Configure provider.tf" translate="no">​</a></h4>
+<p>Open the provider.tf file located in the terraform-config/example-production-workload/provider.tf directory. Once there, paste the following configuration below the.</p>
+<p>Uncomment backend block and update with <code>example_production_workload_s3_bucket_name</code>:</p>
+<p>Get bucket name:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform -chdir=../aws-devops-core output example_production_workload_s3_bucket_name</span><br></span></code></pre></div></div>
+<p>Updated provider.tf:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">backend &quot;s3&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  bucket         = &quot;example-prod-workload-tf-state-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  key            = &quot;state/terraform.tfstate&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region         = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  encrypt        = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  use_lockfile   = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-create-variablestf-and-maintf">Step 3: Create variables.tf and main.tf<a href="#step-3-create-variablestf-and-maintf" class="hash-link" aria-label="Direct link to Step 3: Create variables.tf and main.tf" title="Direct link to Step 3: Create variables.tf and main.tf" translate="no">​</a></h4>
+<p><strong>variables.tf</strong> - Input variables with defaults</p>
+<p><strong>main.tf</strong> - Production workload resources (IAM role, S3 bucket)</p>
+<p>Note: main.tf includes Checkov skip directives for non-critical findings</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-create-tests">Step 4: Create Tests<a href="#step-4-create-tests" class="hash-link" aria-label="Direct link to Step 4: Create Tests" title="Direct link to Step 4: Create Tests" translate="no">​</a></h4>
+<p><strong>tests/main.tftest.hcl</strong> -- Integration tests validating:</p>
+<ul>
+<li class="">IAM role naming conventions</li>
+<li class="">Trust policy configuration</li>
+<li class="">S3 bucket naming</li>
+</ul>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># HINT: Make sure to run `terraform init` in this directory before running `terraform test`. Also, ensure you use constant values (e.g. string, number, bool, etc.) within your tests where at all possible or you may encounter errors.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># Configure the AWS Provider</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">provider &quot;aws&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"># - End-to-end Tests -</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">run &quot;integration_test&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  command = apply</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  # Using global variables defined above since additional variables block is not defined here</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  variables {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    aws_region = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  # Assertions</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  # IAM Role - Ensure the role has the correct name, and trust policy after creation</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  assert {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    condition     = startswith(aws_s3_bucket.example.id, &quot;example-prod-resource&quot;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    error_message = &quot;The IAM Role name (${aws_iam_role.example.name}) did not start with the expected value (example-prod-resource).&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  assert {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    condition     = jsondecode(aws_iam_role.example.assume_role_policy)[&quot;Statement&quot;][0][&quot;Principal&quot;][&quot;Service&quot;] == &quot;ec2.amazonaws.com&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    error_message = &quot;The IAM role trust policy (${aws_iam_role.example.assume_role_policy}) did not trust the expected service principal (ec2.amazonaws.com)&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  # S3 - Ensure S3 Bucket have correct names after creation</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  assert {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    condition     = startswith(aws_s3_bucket.example.id, &quot;example-prod-resource&quot;)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    error_message = &quot;The S3 Remote State Bucket name (${aws_s3_bucket.example.id}) did not start with the expected value (example-prod-resource).&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-5-initialize-git-and-configure-remote">Step 5: Initialize Git and Configure Remote<a href="#step-5-initialize-git-and-configure-remote" class="hash-link" aria-label="Direct link to Step 5: Initialize Git and Configure Remote" title="Direct link to Step 5: Initialize Git and Configure Remote" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git init</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git branch -M main</span><br></span></code></pre></div></div>
+<p>Get bucket name:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform -chdir=../aws-devops-core output -json git_remote_s3_bucket_names | jq -r &#x27;.&quot;example_production_workload&quot;&#x27;</span><br></span></code></pre></div></div>
+<p>Add remote:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git remote add origin s3+zip://example-prod-workload-XXXX/s3-repo</span><br></span></code></pre></div></div>
+<p>Verify:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git remote -v</span><br></span></code></pre></div></div>
+<p>Expected output:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">origin  s3+zip://example-prod-workload-XXXX/s3-repo (fetch)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">origin  s3+zip://example-prod-workload-XXXX/s3-repo (push)</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-6-push-code">Step 6: Push Code<a href="#step-6-push-code" class="hash-link" aria-label="Direct link to Step 6: Push Code" title="Direct link to Step 6: Push Code" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git add .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m &quot;Initial commit&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push origin -u main</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-7-monitor-deployment-pipeline">Step 7: Monitor Deployment Pipeline<a href="#step-7-monitor-deployment-pipeline" class="hash-link" aria-label="Direct link to Step 7: Monitor Deployment Pipeline" title="Direct link to Step 7: Monitor Deployment Pipeline" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline.</p>
+<p>The <code>tf-deployment-example-production-workload</code> pipeline status should be <strong>In progress</strong>.</p>
+<p><img decoding="async" loading="lazy" alt="Tf deploy pipeline in progress" src="/Cloud-Learning-Labs/assets/images/image-18-804f3c5779aeb3e80bf66b283dfac88e.png" width="1747" height="891" class="img_ev3q"></p>
+<p>After a few minutes, pipeline completes successfully and deploys production infrastructure:</p>
+<p><img decoding="async" loading="lazy" alt="Tf deploy pipeline successful" src="/Cloud-Learning-Labs/assets/images/image-19-e8faf29ba22d9a79909d25383d42aa30.png" width="1747" height="891" class="img_ev3q">
+<img decoding="async" loading="lazy" alt="Tf deploy pipeline successful overview pipeline" src="/Cloud-Learning-Labs/assets/images/image-20-e094c904c90e6dcf3bfa467312f0f276.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="37-multi-account-considerations">3.7 Multi-Account Considerations<a href="#37-multi-account-considerations" class="hash-link" aria-label="Direct link to 3.7 Multi-Account Considerations" title="Direct link to 3.7 Multi-Account Considerations" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="enterprise-architecture">Enterprise Architecture<a href="#enterprise-architecture" class="hash-link" aria-label="Direct link to Enterprise Architecture" title="Direct link to Enterprise Architecture" translate="no">​</a></h4>
+<p>For production environments, workloads should be deployed across multiple AWS accounts:</p>
+<ul>
+<li class=""><strong>Shared Services Account:</strong> Houses CI/CD pipelines, security tools, AWS Organizations/SSO</li>
+<li class=""><strong>Production Account:</strong> Production workloads and resources</li>
+<li class=""><strong>Development/Staging Accounts:</strong> Separate environments per team or project</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Multi-Account architecture diagram" src="/Cloud-Learning-Labs/assets/images/image-21-13d38c4fc2c96d4cb09bfdb036e2cd9c.png" width="1470" height="1103" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="cross-account-deployment">Cross-Account Deployment<a href="#cross-account-deployment" class="hash-link" aria-label="Direct link to Cross-Account Deployment" title="Direct link to Cross-Account Deployment" translate="no">​</a></h4>
+<p>To deploy resources in different accounts, use <strong>cross-account IAM roles</strong> with the <code>assume_role</code> option:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">provider &quot;aws&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  assume_role {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    role_arn = &quot;arn:aws:iam::123456789012:role/iac&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>How It Works:</strong></p>
+<ol>
+<li class="">IAM Role in Shared Services Account assumes role in Production Account via STS</li>
+<li class="">STS returns temporary credentials</li>
+<li class="">Terraform uses credentials to provision resources in Production Account</li>
+</ol>
+<p>[Paste screenshot - Terraform Cross-Account Access diagram]</p>
+<p><strong>Best Practices:</strong></p>
+<ul>
+<li class="">Separate S3 state bucket per account (managed centrally)</li>
+<li class="">Configure IAM permissions for cross-account access</li>
+<li class="">Use least privilege principle for assumed roles</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-4-manual-approval-and-notifications">Task 4: Manual Approval and Notifications<a href="#task-4-manual-approval-and-notifications" class="hash-link" aria-label="Direct link to Task 4: Manual Approval and Notifications" title="Direct link to Task 4: Manual Approval and Notifications" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-3">Objective<a href="#objective-3" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Implement a governance layer within the pipeline to ensure manual review of infrastructure changes before production deployment.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="41-add-manual-approval-stage">4.1 Add Manual Approval Stage<a href="#41-add-manual-approval-stage" class="hash-link" aria-label="Direct link to 4.1 Add Manual Approval Stage" title="Direct link to 4.1 Add Manual Approval Stage" translate="no">​</a></h3>
+<p>In this section, we&#x27;ll enhance the Terraform Deployment Pipeline by adding a manual approval step before the Apply stage. This ensures changes are reviewed by stakeholders before deployment.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-directory-1">Step 1: Navigate to Directory<a href="#step-1-navigate-to-directory-1" class="hash-link" aria-label="Direct link to Step 1: Navigate to Directory" title="Direct link to Step 1: Navigate to Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/aws-devops-core</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-update-maintf">Step 2: Update main.tf<a href="#step-2-update-maintf" class="hash-link" aria-label="Direct link to Step 2: Update main.tf" title="Direct link to Step 2: Update main.tf" translate="no">​</a></h4>
+<p>Open <code>main.tf</code> and add the manual approval stage configuration between the <strong>Build_Checkov</strong> and <strong>Apply</strong> stages in the <code>tf_deployment_example_production_workload</code> pipeline.</p>
+<p><strong>Add this configuration:</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Add Manual Approval</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name = &quot;Manual_Approval&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  action = [</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      name     = &quot;ManualApprovalAction&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      category = &quot;Approval&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      owner    = &quot;AWS&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      provider = &quot;Manual&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      version  = &quot;1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      configuration = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         CustomData      = &quot;Please approve this deployment.&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      input_artifacts = []</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      output_artifacts = []</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      run_order = 4</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    },</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">},</span><br></span></code></pre></div></div>
+<p><strong>Important:</strong></p>
+<ul>
+<li class="">Place this stage AFTER Build_Checkov (run_order = 3)</li>
+<li class="">Update the Apply stage <code>run_order</code> to <code>5</code></li>
+<li class="">Stages are executed in the order they appear in the configuration</li>
+</ul>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-apply-changes">Step 3: Apply Changes<a href="#step-3-apply-changes" class="hash-link" aria-label="Direct link to Step 3: Apply Changes" title="Direct link to Step 3: Apply Changes" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform apply successfully" src="/Cloud-Learning-Labs/assets/images/image-22-118494ee81a99ed034abb51697709643.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-verify-manual-approval-stage">Step 4: Verify Manual Approval Stage<a href="#step-4-verify-manual-approval-stage" class="hash-link" aria-label="Direct link to Step 4: Verify Manual Approval Stage" title="Direct link to Step 4: Verify Manual Approval Stage" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline → Select <code>tf-deployment-example-production-workload</code>.</p>
+<p>You should see the new <code>Manual_Approval</code> stage between <code>Build_Checkov</code> and <code>Apply</code>.</p>
+<p><img decoding="async" loading="lazy" alt="Manual approval stage added" src="/Cloud-Learning-Labs/assets/images/image-23-d5eddbb7ffb538ee6510027147b97038.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="42-add-sns-notifications">4.2 Add SNS Notifications<a href="#42-add-sns-notifications" class="hash-link" aria-label="Direct link to 4.2 Add SNS Notifications" title="Direct link to 4.2 Add SNS Notifications" translate="no">​</a></h3>
+<p>Now let&#x27;s implement Amazon SNS to notify stakeholders when manual approval is needed.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-create-sns-topic-and-subscription">Step 1: Create SNS Topic and Subscription<a href="#step-1-create-sns-topic-and-subscription" class="hash-link" aria-label="Direct link to Step 1: Create SNS Topic and Subscription" title="Direct link to Step 1: Create SNS Topic and Subscription" translate="no">​</a></h4>
+<p>At the <strong>top</strong> of <code>main.tf</code> (outside the module configuration), add:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource &quot;aws_sns_topic&quot; &quot;manual_approval_sns_topic&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name = &quot;manual-approval-sns-topic&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">resource &quot;aws_sns_topic_subscription&quot; &quot;manual_approval_sns_subscription&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  topic_arn = aws_sns_topic.manual_approval_sns_topic.arn</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  protocol  = &quot;email&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  endpoint  = &quot;your@email.com&quot;  # Replace with your email address</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>Important:</strong> Replace <code>your@email.com</code> with your actual email address.</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-update-manual-approval-configuration">Step 2: Update Manual Approval Configuration<a href="#step-2-update-manual-approval-configuration" class="hash-link" aria-label="Direct link to Step 2: Update Manual Approval Configuration" title="Direct link to Step 2: Update Manual Approval Configuration" translate="no">​</a></h4>
+<p>In the <code>Manual_Approval</code> stage configuration, add the SNS notification:</p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">configuration = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   CustomData      = &quot;Please approve this deployment.&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   NotificationArn = aws_sns_topic.manual_approval_sns_topic.arn # Add this line</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>Complete Manual Approval Stage:</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain"># Add Manual Approval</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  name = &quot;Manual_Approval&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  action = [</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      name     = &quot;ManualApprovalAction&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      category = &quot;Approval&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      owner    = &quot;AWS&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      provider = &quot;Manual&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      version  = &quot;1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      configuration = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         CustomData      = &quot;Please approve this deployment.&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         NotificationArn = aws_sns_topic.manual_approval_sns_topic.arn</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      input_artifacts = []</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      output_artifacts = []</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      run_order = 4</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    },</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">},</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-apply-sns-configuration">Step 3: Apply SNS Configuration<a href="#step-3-apply-sns-configuration" class="hash-link" aria-label="Direct link to Step 3: Apply SNS Configuration" title="Direct link to Step 3: Apply SNS Configuration" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform plan</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">terraform apply -auto-approve</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform apply successfully" src="/Cloud-Learning-Labs/assets/images/image-24-e736f74e136de3d5acaa27694bd0ec03.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-confirm-sns-subscription">Step 4: Confirm SNS Subscription<a href="#step-4-confirm-sns-subscription" class="hash-link" aria-label="Direct link to Step 4: Confirm SNS Subscription" title="Direct link to Step 4: Confirm SNS Subscription" translate="no">​</a></h4>
+<p>Check the email address you provided. You should receive a subscription confirmation email from AWS SNS.</p>
+<p>Click <strong>&quot;Confirm subscription&quot;</strong> in the email.</p>
+<p><img decoding="async" loading="lazy" alt="SNS subscription confirmation email" src="/Cloud-Learning-Labs/assets/images/image-25-9eccb6936294300b7c6c1ae9571c9be6.png" width="1113" height="421" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="SNS configuration success" src="/Cloud-Learning-Labs/assets/images/image-26-5116892344856fdb49594b620b707218.png" width="1747" height="891" class="img_ev3q"></p>
+<p>Once confirmed, you&#x27;ll receive email notifications whenever manual approval is needed.</p>
+<p>Troubleshooting Tip: SNS Subscription Loop
+Issue: Receiving an &quot;Unsubscribe Confirmation&quot; email immediately after attempting to subscribe.</p>
+<p>Root Cause: This is often caused by corporate email filters, security scanners, or browser extensions that automatically &quot;pre-click&quot; links in emails to check for malicious content. In doing so, they inadvertently trigger the Unsubscribe link located near the confirmation button.</p>
+<p>Solution: &gt; 1. Click the &quot;Resubscribe&quot; link in the most recent AWS notification email. 2. Once the new &quot;Subscription Confirmation&quot; email arrives, right-click the &quot;Confirm subscription&quot; link and select &quot;Open in Incognito/Private Window&quot;. 3. Verify in the AWS SNS Console that the subscription status has successfully transitioned to Confirmed.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="43-test-manual-approval-workflow">4.3 Test Manual Approval Workflow<a href="#43-test-manual-approval-workflow" class="hash-link" aria-label="Direct link to 4.3 Test Manual Approval Workflow" title="Direct link to 4.3 Test Manual Approval Workflow" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-production-workload">Step 1: Navigate to Production Workload<a href="#step-1-navigate-to-production-workload" class="hash-link" aria-label="Direct link to Step 1: Navigate to Production Workload" title="Direct link to Step 1: Navigate to Production Workload" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd ../example-production-workload</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-make-a-code-change">Step 2: Make a Code Change<a href="#step-2-make-a-code-change" class="hash-link" aria-label="Direct link to Step 2: Make a Code Change" title="Direct link to Step 2: Make a Code Change" translate="no">​</a></h4>
+<p>Open <code>main.tf</code> and update the S3 bucket prefix:</p>
+<p><strong>Before:</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource &quot;aws_s3_bucket&quot; &quot;example&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  bucket_prefix = &quot;example-prod-resource&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  force_destroy = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>After:</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">resource &quot;aws_s3_bucket&quot; &quot;example&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  bucket_prefix = &quot;example-prod-resource-new&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  force_destroy = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-push-changes">Step 3: Push Changes<a href="#step-3-push-changes" class="hash-link" aria-label="Direct link to Step 3: Push Changes" title="Direct link to Step 3: Push Changes" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git add .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m &quot;Test Manual Approval&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push origin -u main</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Git push successfully" src="/Cloud-Learning-Labs/assets/images/image-27-e6435d1df60d3e24efee36bdd1a62402.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-monitor-pipeline">Step 4: Monitor Pipeline<a href="#step-4-monitor-pipeline" class="hash-link" aria-label="Direct link to Step 4: Monitor Pipeline" title="Direct link to Step 4: Monitor Pipeline" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline → Select <code>tf-deployment-example-production-workload</code>.</p>
+<p>Watch the pipeline progress through:</p>
+<ul>
+<li class="">Source</li>
+<li class="">Build_TF_Test</li>
+<li class="">Build_Checkov</li>
+<li class=""><strong>Manual_Approval</strong> (Pipeline pauses here)</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Pipeline waiting for approval" src="/Cloud-Learning-Labs/assets/images/image-28-41e9d43e4e5526b8ddf4bad2a5a5d19e.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-5-receive-email-notification">Step 5: Receive Email Notification<a href="#step-5-receive-email-notification" class="hash-link" aria-label="Direct link to Step 5: Receive Email Notification" title="Direct link to Step 5: Receive Email Notification" translate="no">​</a></h4>
+<p>Check your email. You should receive an approval notification containing:</p>
+<ul>
+<li class="">Pipeline name</li>
+<li class="">Custom message: &quot;Please approve this deployment.&quot;</li>
+<li class="">Link to approve or reject</li>
+</ul>
+<p><img decoding="async" loading="lazy" alt="Email notification" src="/Cloud-Learning-Labs/assets/images/image-32-baf4cad303d5ec290a071a91cefa0f0e.png" width="1113" height="773" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-6-review-and-approve">Step 6: Review and Approve<a href="#step-6-review-and-approve" class="hash-link" aria-label="Direct link to Step 6: Review and Approve" title="Direct link to Step 6: Review and Approve" translate="no">​</a></h4>
+<p><strong>In the Email:</strong>
+Click the link next to <strong>&quot;Approve or reject:&quot;</strong></p>
+<p><strong>In AWS Console:</strong></p>
+<ol>
+<li class="">Click on <code>ManualApprovalAction</code> in the pipeline</li>
+<li class="">Click <strong>&quot;Revisions&quot;</strong> to see the commit that triggered the pipeline</li>
+<li class="">Review the changes made in the commit</li>
+<li class="">Select the <strong>&quot;Approve&quot;</strong> radio button</li>
+<li class="">Optionally add a comment</li>
+<li class="">Click <strong>&quot;Submit&quot;</strong></li>
+</ol>
+<p><img decoding="async" loading="lazy" alt="Manual approval dialog" src="/Cloud-Learning-Labs/assets/images/image-29-a196656887952ad87e6b4e5a9e65df44.png" width="1869" height="944" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-7-verify-apply-execution">Step 7: Verify Apply Execution<a href="#step-7-verify-apply-execution" class="hash-link" aria-label="Direct link to Step 7: Verify Apply Execution" title="Direct link to Step 7: Verify Apply Execution" translate="no">​</a></h4>
+<p>After approval, the pipeline continues to the <code>Apply</code> stage and deploys the infrastructure changes.</p>
+<p><img decoding="async" loading="lazy" alt="Pipeline continuing after approval" src="/Cloud-Learning-Labs/assets/images/image-30-14dcd5f41046e7ed7e7e9684615620ca.png" width="1747" height="948" class="img_ev3q"></p>
+<p><img decoding="async" loading="lazy" alt="Pipeline successful completion" src="/Cloud-Learning-Labs/assets/images/image-31-b315f4cfec872120abee3aa49b23e1a2.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="44-approval-best-practices">4.4 Approval Best Practices<a href="#44-approval-best-practices" class="hash-link" aria-label="Direct link to 4.4 Approval Best Practices" title="Direct link to 4.4 Approval Best Practices" translate="no">​</a></h3>
+<p><strong>Review Checklist:</strong></p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Terraform plan shows expected changes only</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->No unintended resource deletions or modifications</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Security configurations follow organizational standards</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Encryption enabled where required</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Tagging standards applied</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Cost impact is acceptable</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Change aligns with change management process</li>
+</ul>
+<p><strong>Notification Best Practices:</strong></p>
+<ul>
+<li class="">Include plan summary or link in notification</li>
+<li class="">Add relevant documentation links</li>
+<li class="">Set approval timeout periods</li>
+<li class="">Configure escalation paths for delayed approvals</li>
+<li class="">Consider multiple approvers for critical environments</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="task-5-resource-cleanup">Task 5: Resource Cleanup<a href="#task-5-resource-cleanup" class="hash-link" aria-label="Direct link to Task 5: Resource Cleanup" title="Direct link to Task 5: Resource Cleanup" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objective-4">Objective<a href="#objective-4" class="hash-link" aria-label="Direct link to Objective" title="Direct link to Objective" translate="no">​</a></h3>
+<p>Deprovision all created resources to ensure cost optimization and prevent ongoing charges.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="51-delete-example-production-resources">5.1 Delete Example Production Resources<a href="#51-delete-example-production-resources" class="hash-link" aria-label="Direct link to 5.1 Delete Example Production Resources" title="Direct link to 5.1 Delete Example Production Resources" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-production-workload-directory-1">Step 1: Navigate to Production Workload Directory<a href="#step-1-navigate-to-production-workload-directory-1" class="hash-link" aria-label="Direct link to Step 1: Navigate to Production Workload Directory" title="Direct link to Step 1: Navigate to Production Workload Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd workshop/workshop-terraform-cicd-and-testing-on-aws/terraform-config/example-production-workload</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-remove-resource-configurations">Step 2: Remove Resource Configurations<a href="#step-2-remove-resource-configurations" class="hash-link" aria-label="Direct link to Step 2: Remove Resource Configurations" title="Direct link to Step 2: Remove Resource Configurations" translate="no">​</a></h4>
+<p>Open <code>main.tf</code> and <code>main.tftest.hcl</code> files. <strong>Delete or comment out ALL contents</strong> in both files.</p>
+<p><strong>Important:</strong> Failure to remove all contents will cause the pipeline to fail. Ensure both files are either empty or fully commented out.</p>
+<p>Save all changes: <strong>File → Save All</strong></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-push-changes-to-trigger-destroy">Step 3: Push Changes to Trigger Destroy<a href="#step-3-push-changes-to-trigger-destroy" class="hash-link" aria-label="Direct link to Step 3: Push Changes to Trigger Destroy" title="Direct link to Step 3: Push Changes to Trigger Destroy" translate="no">​</a></h4>
+<p>When you run <code>terraform apply</code>, Terraform compares your configuration files against the state file. Since we&#x27;ve removed all resource declarations, Terraform will detect that resources exist in the state file but not in the configuration, and will create an execution plan to <strong>destroy</strong> those resources.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">git add .</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git commit -m &quot;Remove all Example Production Workload TF Resources&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git push</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-monitor-pipeline-execution">Step 4: Monitor Pipeline Execution<a href="#step-4-monitor-pipeline-execution" class="hash-link" aria-label="Direct link to Step 4: Monitor Pipeline Execution" title="Direct link to Step 4: Monitor Pipeline Execution" translate="no">​</a></h4>
+<p>Navigate to AWS Console → CodePipeline Dashboard.</p>
+<p>The Terraform Deployment Pipeline will start running. Wait for it to complete.</p>
+<p><strong>Important:</strong> If you completed the Manual Approval section, you&#x27;ll receive an email notification. <strong>You must approve</strong> the changes for the pipeline to continue and destroy resources.</p>
+<p><img decoding="async" loading="lazy" alt="Tf destroy resources success" src="/Cloud-Learning-Labs/assets/images/image-33-10666e2c92cf98629be1daf9c11947c0.png" width="1747" height="948" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="52-destroy-aws-devops-core-infrastructure">5.2 Destroy AWS DevOps Core Infrastructure<a href="#52-destroy-aws-devops-core-infrastructure" class="hash-link" aria-label="Direct link to 5.2 Destroy AWS DevOps Core Infrastructure" title="Direct link to 5.2 Destroy AWS DevOps Core Infrastructure" translate="no">​</a></h3>
+<p>Now let&#x27;s delete the Git Remote S3 Buckets, CodeBuild Projects, CodePipeline pipelines, and all related infrastructure.</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-aws-devops-core-directory">Step 1: Navigate to aws-devops-core Directory<a href="#step-1-navigate-to-aws-devops-core-directory" class="hash-link" aria-label="Direct link to Step 1: Navigate to aws-devops-core Directory" title="Direct link to Step 1: Navigate to aws-devops-core Directory" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd ../aws-devops-core</span><br></span></code></pre></div></div>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-remove-s3-backend-configuration">Step 2: Remove S3 Backend Configuration<a href="#step-2-remove-s3-backend-configuration" class="hash-link" aria-label="Direct link to Step 2: Remove S3 Backend Configuration" title="Direct link to Step 2: Remove S3 Backend Configuration" translate="no">​</a></h4>
+<p>Open <code>provider.tf</code> and <strong>delete or comment out</strong> the backend block.</p>
+<p><strong>Before (With S3 Backend):</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  required_providers {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    aws = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      source  = &quot;hashicorp/aws&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      version = &quot;~&gt; 6.0&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  backend &quot;s3&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    bucket         = &quot;aws-devops-core-tf-state-XXXX&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    key            = &quot;state/terraform.tfstate&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    region         = &quot;us-east-1&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    encrypt        = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    use_lockfile   = true</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">provider &quot;aws&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region = var.aws_region</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  default_tags {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    tags = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      Management = &quot;Terraform&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p><strong>After (Without S3 Backend):</strong></p>
+<div class="language-hcl codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-hcl codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  required_providers {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    aws = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      source  = &quot;hashicorp/aws&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      version = &quot;~&gt; 6.0&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  # Backend block removed - Terraform will operate locally</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">provider &quot;aws&quot; {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  region = var.aws_region</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  default_tags {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    tags = {</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      Management = &quot;Terraform&quot;</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre></div></div>
+<p>Save the file: <strong>File → Save All</strong></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-3-migrate-state-from-s3-to-local">Step 3: Migrate State from S3 to Local<a href="#step-3-migrate-state-from-s3-to-local" class="hash-link" aria-label="Direct link to Step 3: Migrate State from S3 to Local" title="Direct link to Step 3: Migrate State from S3 to Local" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform init -migrate-state</span><br></span></code></pre></div></div>
+<p>When prompted: <strong>&quot;Do you want to copy existing state from S3 to the new local backend?&quot;</strong></p>
+<p>Type <code>yes</code> and press Enter.</p>
+<p>You should see:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Successfully unset the backend &quot;s3&quot;. Terraform will now operate locally.</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Initializing provider plugins...</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Reusing previous version of hashicorp/aws from the dependency lock file</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">- Using previously-installed hashicorp/aws v5.34.0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Terraform has been successfully initialized!</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="State migration success" src="/Cloud-Learning-Labs/assets/images/image-34-55930a8fb367a5c5715eef7912e78c71.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-4-destroy-all-infrastructure">Step 4: Destroy All Infrastructure<a href="#step-4-destroy-all-infrastructure" class="hash-link" aria-label="Direct link to Step 4: Destroy All Infrastructure" title="Direct link to Step 4: Destroy All Infrastructure" translate="no">​</a></h4>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">terraform destroy -auto-approve</span><br></span></code></pre></div></div>
+<p>This will destroy:</p>
+<ul>
+<li class="">Git Remote S3 Buckets (module-aws-tf-cicd, aws-devops-core, example-production-workload)</li>
+<li class="">Terraform State S3 Buckets</li>
+<li class="">CodePipeline pipelines</li>
+<li class="">CodeBuild projects</li>
+<li class="">ECR repository</li>
+<li class="">SNS topic and subscriptions</li>
+<li class="">IAM roles and policies</li>
+<li class="">EventBridge rules</li>
+<li class="">All related infrastructure</li>
+</ul>
+<p>Wait for the command to complete. You should see:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Destroy complete! Resources: 64 destroyed.</span><br></span></code></pre></div></div>
+<p><img decoding="async" loading="lazy" alt="Terraform destroy output" src="/Cloud-Learning-Labs/assets/images/image-35-f8671854cf391cacf70d1fbb033bb719.png" width="1747" height="891" class="img_ev3q"></p>
+<p>Cleanup Troubleshooting: Validation Error during Destroy
+Issue: Encountered Error: filter_policy is required when filter_policy_scope is set during the final destruction phase.</p>
+<p>Root Cause: Strict validation rules in the AWS Provider v6.x prevented the state refresh because of a mismatch in SNS subscription attributes, even during a delete operation.</p>
+<p>Resolution: &gt; * Executed terraform state rm aws_sns_topic_subscription.manual_approval_sns_subscription to decouple the problematic resource from the Terraform state.</p>
+<p>Successfully ran terraform destroy for the remaining 60+ resources.</p>
+<p>Performed a final manual cleanup in the AWS SNS Console to ensure no orphan subscriptions remained.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="53-delete-cloudformation-stack-if-applicable">5.3 Delete CloudFormation Stack (If Applicable)<a href="#53-delete-cloudformation-stack-if-applicable" class="hash-link" aria-label="Direct link to 5.3 Delete CloudFormation Stack (If Applicable)" title="Direct link to 5.3 Delete CloudFormation Stack (If Applicable)" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-1-navigate-to-cloudformation">Step 1: Navigate to CloudFormation<a href="#step-1-navigate-to-cloudformation" class="hash-link" aria-label="Direct link to Step 1: Navigate to CloudFormation" title="Direct link to Step 1: Navigate to CloudFormation" translate="no">​</a></h4>
+<p>Go to AWS Console → CloudFormation</p>
+<hr>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="step-2-delete-stack">Step 2: Delete Stack<a href="#step-2-delete-stack" class="hash-link" aria-label="Direct link to Step 2: Delete Stack" title="Direct link to Step 2: Delete Stack" translate="no">​</a></h4>
+<ol>
+<li class="">Find your CloudFormation stack (default name: <code>Terraform-CICD-Workshop</code> or custom name you provided)</li>
+<li class="">Select the stack</li>
+<li class="">Click <strong>Delete</strong></li>
+<li class="">Confirm deletion</li>
+</ol>
+<p>This will terminate the EC2 instance running the Code Editor and remove all related resources.</p>
+<p><img decoding="async" loading="lazy" alt="CloudFormation stack deletion" src="/Cloud-Learning-Labs/assets/images/image-36-284b6ad9d168b179b4b2ab35c1e0ef17.png" width="1747" height="891" class="img_ev3q"></p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="54-cleanup-verification-checklist">5.4 Cleanup Verification Checklist<a href="#54-cleanup-verification-checklist" class="hash-link" aria-label="Direct link to 5.4 Cleanup Verification Checklist" title="Direct link to 5.4 Cleanup Verification Checklist" translate="no">​</a></h3>
+<p>Verify all resources have been removed:</p>
+<p><strong>Infrastructure Resources:</strong></p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Example production workload resources destroyed (IAM role, S3 bucket)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->CodePipeline pipelines deleted (tf-module-validation, tf-deployment)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->CodeBuild projects deleted (TerraformTest, Checkov, TFApply projects)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Git Remote S3 buckets deleted (module-aws-tf-cicd, aws-devops-core, example-production-workload)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->Terraform State S3 buckets deleted (aws-devops-core-tf-state, example-prod-workload-tf-state)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->ECR repository deleted (checkov)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->SNS topic deleted (manual-approval-sns-topic)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->SNS email subscription removed</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->IAM roles and policies deleted</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->EventBridge rules deleted</li>
+</ul>
+<p><strong>Workshop Environment:</strong></p>
+<ul class="contains-task-list containsTaskList_mC6p">
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->CloudFormation stack deleted (if applicable)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->EC2 Code Editor instance terminated (if applicable)</li>
+<li class="task-list-item"><input type="checkbox" disabled=""> <!-- -->No remaining resources in AWS account</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="55-final-cost-verification">5.5 Final Cost Verification<a href="#55-final-cost-verification" class="hash-link" aria-label="Direct link to 5.5 Final Cost Verification" title="Direct link to 5.5 Final Cost Verification" translate="no">​</a></h3>
+<p><strong>Check for Unexpected Charges:</strong></p>
+<ol>
+<li class="">Navigate to AWS Cost Explorer</li>
+<li class="">Review costs for the last 7 days</li>
+<li class="">Look for any unexpected charges</li>
+<li class="">Set up billing alerts for future monitoring</li>
+</ol>
+<p><strong>Common Resources to Double-Check:</strong></p>
+<ul>
+<li class="">S3 buckets (ensure all are deleted or empty)</li>
+<li class="">EC2 instances (ensure all are terminated)</li>
+<li class="">NAT Gateways (if any were created)</li>
+<li class="">Elastic IPs (ensure none are allocated)</li>
+<li class="">EBS volumes (ensure none are orphaned)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-takeaways">Key Takeaways<a href="#key-takeaways" class="hash-link" aria-label="Direct link to Key Takeaways" title="Direct link to Key Takeaways" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-state-management">1. State Management<a href="#1-state-management" class="hash-link" aria-label="Direct link to 1. State Management" title="Direct link to 1. State Management" translate="no">​</a></h3>
+<p><strong>Utilizing S3 and DynamoDB for remote state is essential for:</strong></p>
+<ul>
+<li class="">Team collaboration and concurrent development</li>
+<li class="">Pipeline stability and consistency</li>
+<li class="">State history and disaster recovery</li>
+<li class="">Preventing state file corruption</li>
+<li class="">Audit trails and change tracking</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-shift-left-security">2. Shift-Left Security<a href="#2-shift-left-security" class="hash-link" aria-label="Direct link to 2. Shift-Left Security" title="Direct link to 2. Shift-Left Security" translate="no">​</a></h3>
+<p><strong>Integrating Checkov early in the development lifecycle:</strong></p>
+<ul>
+<li class="">Prevents security debt accumulation</li>
+<li class="">Reduces risk of deploying vulnerable infrastructure</li>
+<li class="">Enforces compliance with industry standards (CIS, PCI-DSS, HIPAA)</li>
+<li class="">Catches misconfigurations before production</li>
+<li class="">Provides actionable remediation guidance</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-automated-validation">3. Automated Validation<a href="#3-automated-validation" class="hash-link" aria-label="Direct link to 3. Automated Validation" title="Direct link to 3. Automated Validation" translate="no">​</a></h3>
+<p><strong>The Terraform Test Framework provides:</strong></p>
+<ul>
+<li class="">Rigorous logic verification without infrastructure costs</li>
+<li class="">Confidence in module behavior across different scenarios</li>
+<li class="">Regression testing for code changes</li>
+<li class="">Documentation through executable tests</li>
+<li class="">Faster feedback loops for developers</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-pipeline-orchestration">4. Pipeline Orchestration<a href="#4-pipeline-orchestration" class="hash-link" aria-label="Direct link to 4. Pipeline Orchestration" title="Direct link to 4. Pipeline Orchestration" translate="no">​</a></h3>
+<p><strong>AWS CodePipeline delivers:</strong></p>
+<ul>
+<li class="">Seamless integration with AWS native services</li>
+<li class="">Automated end-to-end IaC workflows</li>
+<li class="">Visual pipeline monitoring and troubleshooting</li>
+<li class="">Scalable and reliable deployment processes</li>
+<li class="">Native integration with AWS security and compliance tools</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-governance-and-compliance">5. Governance and Compliance<a href="#5-governance-and-compliance" class="hash-link" aria-label="Direct link to 5. Governance and Compliance" title="Direct link to 5. Governance and Compliance" translate="no">​</a></h3>
+<p><strong>Manual approval gates ensure:</strong></p>
+<ul>
+<li class="">Human oversight for critical changes</li>
+<li class="">Alignment with change management processes</li>
+<li class="">Risk mitigation through peer review</li>
+<li class="">Audit trails for compliance requirements</li>
+<li class="">Controlled deployment cadence</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-infrastructure-as-code-best-practices">6. Infrastructure as Code Best Practices<a href="#6-infrastructure-as-code-best-practices" class="hash-link" aria-label="Direct link to 6. Infrastructure as Code Best Practices" title="Direct link to 6. Infrastructure as Code Best Practices" translate="no">​</a></h3>
+<p><strong>Key principles demonstrated:</strong></p>
+<ul>
+<li class="">Version control for all infrastructure code</li>
+<li class="">Modular and reusable Terraform configurations</li>
+<li class="">Automated testing at multiple levels</li>
+<li class="">Security scanning as part of CI/CD</li>
+<li class="">Immutable infrastructure deployments</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="workshop-completion-status">Workshop Completion Status<a href="#workshop-completion-status" class="hash-link" aria-label="Direct link to Workshop Completion Status" title="Direct link to Workshop Completion Status" translate="no">​</a></h2>
+<table><thead><tr><th>Section</th><th>Status</th></tr></thead><tbody><tr><td>Task 1: Environment Configuration</td><td>✅ COMPLETED</td></tr><tr><td>Task 2: Local Module Development &amp; Testing</td><td>✅ COMPLETED</td></tr><tr><td>Task 3: CI/CD Pipeline Implementation</td><td>✅ COMPLETED</td></tr><tr><td>Task 4: Manual Approval Gates</td><td>✅ COMPLETED</td></tr><tr><td>Task 5: Resource Cleanup</td><td>✅ COMPLETED</td></tr></tbody></table>
+<p><strong>Overall Result:</strong> ✅ SUCCESSFUL</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="additional-resources">Additional Resources<a href="#additional-resources" class="hash-link" aria-label="Direct link to Additional Resources" title="Direct link to Additional Resources" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="terraform-resources">Terraform Resources<a href="#terraform-resources" class="hash-link" aria-label="Direct link to Terraform Resources" title="Direct link to Terraform Resources" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://www.terraform.io/docs" target="_blank" rel="noopener noreferrer" class="">Terraform Documentation</a></li>
+<li class=""><a href="https://developer.hashicorp.com/terraform/language/tests" target="_blank" rel="noopener noreferrer" class="">Terraform Test Framework Guide</a></li>
+<li class=""><a href="https://www.terraform-best-practices.com/" target="_blank" rel="noopener noreferrer" class="">Terraform Best Practices</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="aws-cicd-resources">AWS CI/CD Resources<a href="#aws-cicd-resources" class="hash-link" aria-label="Direct link to AWS CI/CD Resources" title="Direct link to AWS CI/CD Resources" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://docs.aws.amazon.com/codepipeline/" target="_blank" rel="noopener noreferrer" class="">AWS CodePipeline Documentation</a></li>
+<li class=""><a href="https://docs.aws.amazon.com/codebuild/" target="_blank" rel="noopener noreferrer" class="">AWS CodeBuild Documentation</a></li>
+<li class=""><a href="https://docs.aws.amazon.com/codecommit/" target="_blank" rel="noopener noreferrer" class="">AWS CodeCommit Documentation</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="security-and-compliance">Security and Compliance<a href="#security-and-compliance" class="hash-link" aria-label="Direct link to Security and Compliance" title="Direct link to Security and Compliance" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://www.checkov.io/documentation.html" target="_blank" rel="noopener noreferrer" class="">Checkov Documentation</a></li>
+<li class=""><a href="https://aws.amazon.com/architecture/security-identity-compliance/" target="_blank" rel="noopener noreferrer" class="">AWS Security Best Practices</a></li>
+<li class=""><a href="https://www.cisecurity.org/benchmark/amazon_web_services" target="_blank" rel="noopener noreferrer" class="">CIS AWS Foundations Benchmark</a></li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="community-and-support">Community and Support<a href="#community-and-support" class="hash-link" aria-label="Direct link to Community and Support" title="Direct link to Community and Support" translate="no">​</a></h3>
+<ul>
+<li class=""><a href="https://discuss.hashicorp.com/" target="_blank" rel="noopener noreferrer" class="">HashiCorp Community Forum</a></li>
+<li class=""><a href="https://repost.aws/" target="_blank" rel="noopener noreferrer" class="">AWS re<!-- -->:Post</a></li>
+<li class=""><a href="https://registry.terraform.io/" target="_blank" rel="noopener noreferrer" class="">Terraform Registry</a></li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/HoangBaoPhuoc/Cloud-Learning-Labs/tree/main/packages/create-docusaurus/templates/shared/docs/Terraform CICD and Testing on AWS/README.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/Cloud-Learning-Labs/docs/Migrating to Zero Trust Architecture on AWS/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Migrating to Zero Trust Architecture</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#overview" class="table-of-contents__link toc-highlight">Overview</a></li><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a></li><li><a href="#workshop-scenario" class="table-of-contents__link toc-highlight">Workshop Scenario</a></li><li><a href="#task-1-environment-setup-and-ide-configuration" class="table-of-contents__link toc-highlight">Task 1: Environment Setup and IDE Configuration</a><ul><li><a href="#objective" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#steps" class="table-of-contents__link toc-highlight">Steps</a></li></ul></li><li><a href="#task-2-local-terraform-module-development-and-testing" class="table-of-contents__link toc-highlight">Task 2: Local Terraform Module Development and Testing</a><ul><li><a href="#objective-1" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#sub-task-21-create-terraform-module" class="table-of-contents__link toc-highlight">Sub-task 2.1: Create Terraform Module</a></li><li><a href="#sub-task-22-terraform-test-framework" class="table-of-contents__link toc-highlight">Sub-task 2.2: Terraform Test Framework</a></li><li><a href="#sub-task-23-security-scanning-with-checkov" class="table-of-contents__link toc-highlight">Sub-task 2.3: Security Scanning with Checkov</a></li></ul></li><li><a href="#task-3-cicd-pipeline-implementation" class="table-of-contents__link toc-highlight">Task 3: CI/CD Pipeline Implementation</a><ul><li><a href="#objective-2" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#31-pipeline-architecture" class="table-of-contents__link toc-highlight">3.1 Pipeline Architecture</a></li><li><a href="#32-resources-overview" class="table-of-contents__link toc-highlight">3.2 Resources Overview</a></li><li><a href="#33-understanding-git-remote-s3" class="table-of-contents__link toc-highlight">3.3 Understanding Git-Remote-S3</a></li><li><a href="#34-deploy-infrastructure" class="table-of-contents__link toc-highlight">3.4 Deploy Infrastructure</a></li><li><a href="#35-configure-s3-remote-backend" class="table-of-contents__link toc-highlight">3.5 Configure S3 Remote Backend</a></li><li><a href="#36-trigger-module-validation-pipeline" class="table-of-contents__link toc-highlight">3.6 Trigger Module Validation Pipeline</a></li><li><a href="#37-trigger-deployment-pipeline" class="table-of-contents__link toc-highlight">3.7 Trigger Deployment Pipeline</a></li><li><a href="#37-multi-account-considerations" class="table-of-contents__link toc-highlight">3.7 Multi-Account Considerations</a></li></ul></li><li><a href="#task-4-manual-approval-and-notifications" class="table-of-contents__link toc-highlight">Task 4: Manual Approval and Notifications</a><ul><li><a href="#objective-3" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#41-add-manual-approval-stage" class="table-of-contents__link toc-highlight">4.1 Add Manual Approval Stage</a></li><li><a href="#42-add-sns-notifications" class="table-of-contents__link toc-highlight">4.2 Add SNS Notifications</a></li><li><a href="#43-test-manual-approval-workflow" class="table-of-contents__link toc-highlight">4.3 Test Manual Approval Workflow</a></li><li><a href="#44-approval-best-practices" class="table-of-contents__link toc-highlight">4.4 Approval Best Practices</a></li></ul></li><li><a href="#task-5-resource-cleanup" class="table-of-contents__link toc-highlight">Task 5: Resource Cleanup</a><ul><li><a href="#objective-4" class="table-of-contents__link toc-highlight">Objective</a></li><li><a href="#51-delete-example-production-resources" class="table-of-contents__link toc-highlight">5.1 Delete Example Production Resources</a></li><li><a href="#52-destroy-aws-devops-core-infrastructure" class="table-of-contents__link toc-highlight">5.2 Destroy AWS DevOps Core Infrastructure</a></li><li><a href="#53-delete-cloudformation-stack-if-applicable" class="table-of-contents__link toc-highlight">5.3 Delete CloudFormation Stack (If Applicable)</a></li><li><a href="#54-cleanup-verification-checklist" class="table-of-contents__link toc-highlight">5.4 Cleanup Verification Checklist</a></li><li><a href="#55-final-cost-verification" class="table-of-contents__link toc-highlight">5.5 Final Cost Verification</a></li></ul></li><li><a href="#key-takeaways" class="table-of-contents__link toc-highlight">Key Takeaways</a><ul><li><a href="#1-state-management" class="table-of-contents__link toc-highlight">1. State Management</a></li><li><a href="#2-shift-left-security" class="table-of-contents__link toc-highlight">2. Shift-Left Security</a></li><li><a href="#3-automated-validation" class="table-of-contents__link toc-highlight">3. Automated Validation</a></li><li><a href="#4-pipeline-orchestration" class="table-of-contents__link toc-highlight">4. Pipeline Orchestration</a></li><li><a href="#5-governance-and-compliance" class="table-of-contents__link toc-highlight">5. Governance and Compliance</a></li><li><a href="#6-infrastructure-as-code-best-practices" class="table-of-contents__link toc-highlight">6. Infrastructure as Code Best Practices</a></li></ul></li><li><a href="#workshop-completion-status" class="table-of-contents__link toc-highlight">Workshop Completion Status</a></li><li><a href="#additional-resources" class="table-of-contents__link toc-highlight">Additional Resources</a><ul><li><a href="#terraform-resources" class="table-of-contents__link toc-highlight">Terraform Resources</a></li><li><a href="#aws-cicd-resources" class="table-of-contents__link toc-highlight">AWS CI/CD Resources</a></li><li><a href="#security-and-compliance" class="table-of-contents__link toc-highlight">Security and Compliance</a></li><li><a href="#community-and-support" class="table-of-contents__link toc-highlight">Community and Support</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Built with ❤️ at AWS. <br> Copyright © 2026 My Project, Inc. Built with Docusaurus.</div></div></div></footer></div>
+</body>
+</html>
