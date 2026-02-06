@@ -9,9 +9,9 @@ export default function Contributors() {
       avatar: 'https://media.licdn.com/dms/image/v2/D5603AQG515A1K31YaA/profile-displayphoto-crop_800_800/B56ZiUmPlwHQAM-/0/1754839711154?e=1771459200&v=beta&t=fywxsgztFIDB22zEUdmdQRUTb8DW5yi91t1tueVuyoM',
     },
     {
-      name: 'Nguyễn Đặng Khánh Quốc',
+      name: 'Hoàng Bảo Phước',
       role: 'Cloud Engineer',
-      avatar: 'https://avatars.githubusercontent.com/u/90808109?v=4',
+      avatar: 'https://avatars.githubusercontent.com/u/184502254?v=4',
     },
   ];
 

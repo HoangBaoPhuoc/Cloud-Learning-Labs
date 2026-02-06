@@ -67,13 +67,13 @@ graph TB
 - 3 AWS accounts (Network, Frontend, Backend) in one Organization
 - IAM Identity Center (AWS SSO) enabled in Management Account
 
-### 🆓 **Certificate Setup: Self-Signed Certificate (Lab Only)**
+### Certificate Setup: Self-Signed Certificate (Lab Only)
 
 #### Pros:
 
-- ✅ **100% Free** - No domain purchase needed
-- ✅ Quick setup (5 minutes)
-- ✅ Works for learning and testing
+- **100% Free** - No domain purchase needed
+- Quick setup (5 minutes)
+- Works for learning and testing
 
 #### Cons:
 
@@ -130,7 +130,7 @@ frontend_domain_name = "zerotrust-lab.local"  # Use .local for self-signed
 
 ---
 
-### 🇻🇳 **Certificate Setup: .id.vn Domain (Free for VN Citizens)**
+### Certificate Setup: .id.vn Domain (Free for VN Citizens)
 
 #### Pros:
 - ✅ **Valid Public Certificate** - No browser warnings (Secure).
