@@ -1,4 +1,4 @@
-# Hands-On: Migrating to a Zero Trust Architecture on AWS (Multi-Account + Identity Center)
+# Migrating to a Zero Trust Architecture on AWS (Multi-Account + Identity Center)
 
 **Based on:** aws-samples/moving-to-a-zero-trust-architecture-in-aws  
 **Focus:** Zero Trust, Verified Access, VPC Lattice, Multi-Account, IAM Identity Center, Terraform  
@@ -77,9 +77,9 @@ graph TB
 
 #### Cons:
 
-- ⚠️ Browser warnings (must click "Accept Risk")
-- ⚠️ Not suitable for production
-- ⚠️ AWS Verified Access may require additional configuration (handled in this guide)
+- Browser warnings (must click "Accept Risk")
+- Not suitable for production
+- AWS Verified Access may require additional configuration (handled in this guide)
 
 #### Setup Steps:
 
@@ -133,13 +133,13 @@ frontend_domain_name = "zerotrust-lab.local"  # Use .local for self-signed
 ### Certificate Setup: .id.vn Domain (Free for VN Citizens)
 
 #### Pros:
-- ✅ **Valid Public Certificate** - No browser warnings (Secure).
-- ✅ **Professional** - Real internet-accessible domain.
-- ✅ **Free Cost** - Supported by "Chương trình hiện diện trực tuyến với tên miền quốc gia .id.vn" (18-23 years old).
+- Valid Public Certificate - No browser warnings (Secure).
+- Professional - Real internet-accessible domain.
+- Free Cost - Supported by "Chương trình hiện diện trực tuyến với tên miền quốc gia .id.vn" (18-23 years old).
 
 #### Cons:
-- ⚠️ Registration process takes time (KYC).
-- ⚠️ Requires defined DNS management.
+- Registration process takes time (KYC).
+- Requires defined DNS management.
 
 #### Setup Steps:
 
@@ -431,7 +431,7 @@ aws sso login --profile backend-account
 
 Clone the repo and prepare terraform.tfvars from examples.
 
-### Steps
+### Step 1
 
 1. Direct to the folder workshop:
    ```bash
@@ -460,7 +460,7 @@ Clone the repo and prepare terraform.tfvars from examples.
 
 Create VPC Lattice Service Network, Route 53 Profile/PHZ, and share via RAM.
 
-### Steps
+### Step 1
 
 Before apply you must enable RAM sharing with AWS Organizations
 ![Deploy Networking](img/config-enable-sharing-AWS.png)
@@ -490,7 +490,7 @@ Before apply you must enable RAM sharing with AWS Organizations
 
 Provision VPC, ECS, ALB, ECR, Verified Access; push frontend image to ECR.
 
-### Steps
+### Step 1
 
 1. Deploy infrastructure:
 
@@ -555,7 +555,7 @@ Provision VPC, ECS, ALB, ECR, Verified Access; push frontend image to ECR.
 
 Provision VPC, ECS (mservice1), Lambda (mservice2), and Lattice Services; push image and update function.
 
-### Steps
+### Step 1
 
 1. Update `backend/terraform.tfvars` with `frontend_application_role_arn` from Task 5.
 2. Deploy infrastructure:
@@ -640,7 +640,7 @@ Provision VPC, ECS (mservice1), Lambda (mservice2), and Lattice Services; push i
 
 Verify login flow with IAM Identity Center and access to the frontend app.
 
-### Steps
+### Step 1
 
 1. Ensure Verified Access policy references correct `idc_group_id`.  
    ![Verified Access Policy – to be added](img/zta-71-verified-access-policy.png)
@@ -687,7 +687,7 @@ Verify login flow with IAM Identity Center and access to the frontend app.
 
 Confirm end-to-end connectivity and inspect logs.
 
-### Steps
+### Step 1
 
 1. End-to-end path: Frontend (ECS) → mservice1 (ECS) → mservice2 (Lambda) via VPC Lattice.
 2. Useful CloudWatch log tails:
@@ -734,7 +734,7 @@ Estimated monthly cost: ~$25–40 depending on usage.
 
 Destroy all resources including infrastructure, logs, and identity configurations to avoid ongoing charges and ensure a clean slate.
 
-### Step 1: Clean up Application Artifacts (Aggressive)
+### Step 1: Clean up Application Artifacts
 
 Terraform cannot destroy non-empty ECR repositories. We must force-delete all images, not just `latest`.
 
@@ -786,11 +786,6 @@ Destroy resources in the reverse order of creation (Backend → Frontend → Net
 cd backend/
 terraform destroy -auto-approve
 
-> [!TIP]
-> **Troubleshooting: "waiting for delete... HealthCheckNotSupported" or "UNAVAILABLE"**
-> If you encounter this error during backend destruction, it is a known timing issue with VPC Lattice Target Groups and ALBs.
-> **Solution:** Simply **run `terraform destroy -auto-approve` again**. The stuck resources will usually be cleaned up on the second attempt.
-
 # 2. Destroy Frontend
 cd ../frontend/
 terraform destroy -auto-approve
@@ -803,6 +798,10 @@ terraform destroy -auto-approve
 ![Destroy Backend](img/zta-102-destroy-backend.png)
 ![Destroy Frontend](img/zta-102-destroy-frontend.png)
 ![Destroy Network](img/zta-102-destroy-network.png)
+
+**Troubleshooting: "waiting for delete... HealthCheckNotSupported" or "UNAVAILABLE"**
+If you encounter this error during backend destruction, it is a known timing issue with VPC Lattice Target Groups and ALBs.
+**Solution:** Simply **run `terraform destroy -auto-approve` again**. The stuck resources will usually be cleaned up on the second attempt.
 
 ### Step 3: Clean up Logs (Hidden Costs)
 
